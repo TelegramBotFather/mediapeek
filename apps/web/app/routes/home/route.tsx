@@ -117,20 +117,6 @@ const METADATA_ENGINE = {
   },
 } as const;
 
-function GithubBrandIcon() {
-  return (
-    <svg
-      role="img"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5 fill-current"
-      aria-hidden="true"
-    >
-      <path d="M12 .297C5.373.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.205 11.386.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.758-1.333-1.758-1.09-.744.082-.729.082-.729 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.604-2.665-.303-5.466-1.333-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.303-.535-1.524.117-3.176 0 0 1.008-.323 3.3 1.23a11.5 11.5 0 0 1 3.003-.404c1.02.005 2.047.138 3.005.404 2.29-1.553 3.297-1.23 3.297-1.23.653 1.653.241 2.874.118 3.176.77.84 1.234 1.91 1.234 3.22 0 4.61-2.805 5.624-5.478 5.921.43.372.814 1.103.814 2.223 0 1.606-.015 2.898-.015 3.293 0 .321.216.694.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z" />
-    </svg>
-  );
-}
-
 export default function HomeRoute() {
   return (
     <div className="flex min-h-screen flex-col font-sans">
@@ -320,28 +306,56 @@ export default function HomeRoute() {
         </section>
 
         <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-12 sm:pb-20">
-          <Card className="border-border/70">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold tracking-tight">
-                Open Source
-              </CardTitle>
-              <CardDescription className="max-w-3xl text-base leading-relaxed">
-                MediaPeek is open source. Explore the codebase, report issues,
-                and contribute improvements.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <a
-                href="https://github.com/DG02002/mediapeek"
-                target="_blank"
-                rel="noreferrer"
-                className={cn(buttonVariants({ size: 'lg' }), 'min-w-48 gap-2')}
-              >
-                <GithubBrandIcon />
-                Visit GitHub Repository
-              </a>
-            </CardContent>
-          </Card>
+          <div className="from-muted/35 via-background to-muted/15 border-border/70 overflow-hidden rounded-[2rem] border bg-linear-to-br">
+            <div className="grid gap-10 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <h2 className="max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
+                    Built in public, maintained on GitHub.
+                  </h2>
+                  <p className="text-muted-foreground max-w-2xl text-base leading-relaxed sm:text-lg">
+                    MediaPeek is open source. Browse the repository on GitHub,
+                    review issues, track releases, and follow the project as it
+                    evolves.
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                  <a
+                    href="https://github.com/DG02002/mediapeek"
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cn(
+                      buttonVariants({ size: 'lg', variant: 'outline' }),
+                      'min-w-48',
+                    )}
+                  >
+                    View Source Code
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start justify-start lg:justify-end">
+                <div
+                  className="inline-flex"
+                  data-testid="github-brand-lockup"
+                >
+                  <img
+                    src="/brand/github/GitHub_Lockup_Black_Clearspace.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className="h-8 w-auto object-contain dark:hidden"
+                  />
+                  <img
+                    src="/brand/github/GitHub_Lockup_White_Clearspace.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className="hidden h-8 w-auto object-contain dark:block"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-12 sm:pb-20">
