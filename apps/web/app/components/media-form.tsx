@@ -617,6 +617,7 @@ export function MediaForm() {
       {isPending && shouldShowPendingStatus && pendingStatus && (
         <div className="mb-4 w-full">
           <Alert>
+            <Icon icon={Loading03Icon} size={16} className="animate-spin" />
             <AlertTitle>{pendingStatus.title}</AlertTitle>
             <AlertDescription>{pendingStatus.message}</AlertDescription>
           </Alert>

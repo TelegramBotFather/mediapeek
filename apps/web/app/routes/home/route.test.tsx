@@ -13,10 +13,6 @@ vi.mock('~/components/header', () => ({
   Header: () => <div data-testid="header" />,
 }));
 
-vi.mock('~/components/media-view', () => ({
-  MediaView: () => <div data-testid="media-preview" />,
-}));
-
 vi.mock('~/components/media-view/trademark-notice', () => ({
   TrademarkNotice: () => <div data-testid="trademark-notice" />,
 }));
@@ -69,5 +65,9 @@ describe('HomeRoute', () => {
         'img[src="/brand/github/GitHub_Lockup_White_Clearspace.svg"]',
       ),
     ).toBeTruthy();
+
+    const previewFrame = screen.getByTitle(/mediapeek preview/i);
+    expect(previewFrame.tagName).toBe('IFRAME');
+    expect(previewFrame.getAttribute('src')).toBe('/preview');
   });
 });

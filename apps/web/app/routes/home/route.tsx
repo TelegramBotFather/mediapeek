@@ -1,98 +1,95 @@
-import type { Route } from './+types/route';
+import type { Route } from "./+types/route";
 
-import { buttonVariants } from '@mediapeek/ui/components/button';
+import {
+  FileZipIcon,
+  FlashIcon,
+  KeyframesMultipleIcon,
+  SecurityLockIcon,
+} from "@hugeicons/core-free-icons";
+import { buttonVariants } from "@mediapeek/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@mediapeek/ui/components/card';
-import { cn } from '@mediapeek/ui/lib/utils';
-import { Link } from 'react-router';
+} from "@mediapeek/ui/components/card";
+import { Icon } from "@mediapeek/ui/components/icon";
+import { cn } from "@mediapeek/ui/lib/utils";
+import { Link } from "react-router";
 
-import { Footer } from '~/components/footer';
-import { Header } from '~/components/header';
-import { MediaView } from '~/components/media-view';
-import { TrademarkNotice } from '~/components/media-view/trademark-notice';
-import { homeDemoFixture } from '~/lib/home-demo-fixture';
-import { MEDIA_CONSTANTS } from '~/lib/media/constants';
+import { Footer } from "~/components/footer";
+import { Header } from "~/components/header";
+import { TrademarkNotice } from "~/components/media-view/trademark-notice";
+import { MEDIA_CONSTANTS } from "~/lib/media/constants";
 
 export const meta: Route.MetaFunction = () => {
   return [
-    { title: 'Home - MediaPeek' },
+    { title: "Home - MediaPeek" },
     {
-      name: 'description',
+      name: "description",
       content:
-        'Inspect media metadata from a URL in a clear, reliable interface.',
+        "Inspect media metadata from a URL in a clear, reliable interface.",
     },
   ];
 };
 
-const features = [
+const capabilities = [
   {
-    id: 'edge-analysis',
-    title: 'Edge Analysis',
-    summary: 'Fetch only the data needed instead of downloading the full file.',
-    points: [
-      'Uses byte-range requests to reduce transfer and wait time.',
-      'Works well with large files when full downloads are unnecessary.',
-      'Processing runs on edge infrastructure close to users.',
+    id: "partial-fetching",
+    title: "Partial Fetching",
+    description:
+      "Reads only the bytes it needs from a URL\u2009—\u2009no full download required. Works with large files just as well as small ones.",
+    specs: [
+      "Byte-range HTTP requests",
+      "Edge-processed near the user",
+      "HTTP/HTTPS URLs",
+      "Google Drive public files & folders",
     ],
   },
   {
-    id: 'archive-extraction',
-    title: 'Archive Extraction',
-    summary: 'Open common archives while keeping file context intact.',
-    points: [
-      'ZIP: Supports stored and DEFLATE-compressed archives.',
-      'TAR: Supports standard tar archives, including @LongLink extended headers.',
-      'Shows the archive name with the inner filename for clearer source context.',
+    id: "archive-support",
+    title: "Archive Support",
+    description:
+      "Looks inside ZIP and TAR archives without extracting the full file. The original archive name stays visible for context.",
+    specs: [
+      "ZIP (Stored, DEFLATE)",
+      "TAR (standard + @LongLink)",
+      "Preserves archive \u2192 filename context",
     ],
   },
   {
-    id: 'supported-sources',
-    title: 'Supported Sources',
-    summary: 'Works with common remote media sources.',
-    points: [
-      'Web servers: HTTP/HTTPS URLs with byte-range optimization.',
-      'Google Drive: Public files and folders.',
-    ],
+    id: "multiple-exports",
+    title: "Multiple Exports",
+    description:
+      "Export metadata in the format that fits your workflow\u2009—\u2009whether you need something human-readable or machine-parseable.",
+    specs: ["Object", "JSON", "Text", "HTML", "XML"],
   },
   {
-    id: 'secure-sharing',
-    title: 'Secure Sharing',
-    summary: 'Share results through end-to-end encrypted PrivateBin links.',
-    points: ['Sharing is designed for privacy-focused collaboration.'],
-  },
-  {
-    id: 'output-formats',
-    title: 'Output Formats',
-    summary:
-      'Export metadata in multiple formats for review, automation, or archiving.',
-    points: [
-      'Available formats: Object, JSON, Text, HTML, XML.',
-      'Readable formats make file properties easier to review.',
-    ],
+    id: "encrypted-sharing",
+    title: "Encrypted Sharing",
+    description:
+      "Share results through encrypted links. Nothing is stored on our servers\u2009—\u2009the key stays in the URL.",
+    specs: ["End-to-end encryption via PrivateBin"],
   },
 ] as const;
 
 const badges = [
-  'dolby-vision',
-  'dolby-atmos',
-  'hdr',
-  'hdr10-plus',
-  '4k',
-  'sd',
-  'hd',
-  'imax',
-  'dts',
-  'dts-x',
-  'hi-res-lossless',
-  'apple-digital-master',
-  'aac',
-  'cc',
-  'sdh',
+  "dolby-vision",
+  "dolby-atmos",
+  "hdr",
+  "hdr10-plus",
+  "4k",
+  "sd",
+  "hd",
+  "imax",
+  "dts",
+  "dts-x",
+  "hi-res-lossless",
+  "apple-digital-master",
+  "aac",
+  "cc",
+  "sdh",
 ] as const;
 
 const trademarkBadges = [
@@ -108,22 +105,33 @@ const trademarkBadges = [
 
 const METADATA_ENGINE = {
   mediainfoJs: {
-    version: '0.3.7',
-    url: 'https://mediainfo.js.org/',
+    version: "0.3.7",
+    url: "https://mediainfo.js.org/",
   },
   mediaInfoLib: {
-    version: '25.10',
-    url: 'https://github.com/MediaArea/MediaInfoLib',
+    version: "25.10",
+    url: "https://github.com/MediaArea/MediaInfoLib",
   },
 } as const;
 
-const homePreviewResults: Record<string, string> = {
-  object: JSON.stringify(homeDemoFixture.results.object, null, 2),
-  json: homeDemoFixture.results.json,
-  text: homeDemoFixture.results.text,
+const capabilityIcons: Record<string, typeof FlashIcon> = {
+  "partial-fetching": FlashIcon,
+  "archive-support": FileZipIcon,
+  "multiple-exports": KeyframesMultipleIcon,
+  "encrypted-sharing": SecurityLockIcon,
 };
 
 export default function HomeRoute() {
+  const previewEmbed = (
+    <iframe
+      src="/preview"
+      title="MediaPeek Preview"
+      className="h-230 w-full bg-transparent"
+      loading="lazy"
+      sandbox="allow-same-origin allow-scripts"
+    />
+  );
+
   return (
     <div className="flex min-h-screen flex-col font-sans">
       <Header />
@@ -152,7 +160,7 @@ export default function HomeRoute() {
               <Link
                 to="/app"
                 viewTransition
-                className={cn(buttonVariants({ size: 'lg' }), 'min-w-40')}
+                className={cn(buttonVariants({ size: "lg" }), "min-w-40")}
               >
                 Open App
               </Link>
@@ -162,68 +170,58 @@ export default function HomeRoute() {
 
         <section className="mx-auto w-full max-w-5xl px-4 pt-0 pb-16 sm:px-12 sm:pb-20">
           <div className="from-muted/30 to-background isolate overflow-hidden rounded-3xl border bg-linear-to-b p-2 shadow-sm sm:p-3">
-            <div className="bg-background max-h-[920px] overflow-auto rounded-2xl border px-4 py-4 sm:px-8">
-              <MediaView
-                data={homePreviewResults}
-                url={homeDemoFixture.sourceUrl}
-              />
+            <div className="bg-background overflow-hidden rounded-2xl border">
+              {previewEmbed}
             </div>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-12 sm:pb-20">
-          <div className="mb-8">
+        <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-12 sm:pb-24">
+          <div className="mb-14">
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Key Features
+              What it does
             </h2>
-            <p className="text-muted-foreground mt-3 max-w-3xl text-lg leading-relaxed">
-              A quick view of the capabilities built into MediaPeek.
+            <p className="text-muted-foreground mt-3 max-w-xl text-base leading-relaxed sm:text-lg">
+              Four things MediaPeek handles for you, from fetch to share.
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {features.map((feature, idx) => (
-              <Card
-                key={feature.id}
-                className={cn(
-                  'border-border/70 bg-background/90',
-                  idx === 0 && 'md:col-span-2',
-                )}
+          <div className="grid gap-0 border-t border-border/60">
+            {capabilities.map((cap, idx) => (
+              <div
+                key={cap.id}
+                className="group grid gap-6 border-b border-border/60 py-8 transition-all duration-500 ease-out sm:grid-cols-[1fr_1.5fr] sm:gap-10 sm:py-10 starting:translate-y-3 starting:opacity-0"
+                style={{ transitionDelay: `${idx * 100}ms` }}
               >
-                <CardHeader className="border-b pb-6">
-                  <p className="text-muted-foreground text-xs font-medium tracking-[0.2em] uppercase">
-                    Feature {String(idx + 1).padStart(2, '0')}
+                {/* Left: title + icon */}
+                <div className="flex items-center gap-3">
+                  <div className="flex shrink-0 items-center justify-center text-primary">
+                    {capabilityIcons[cap.id] && (
+                      <Icon icon={capabilityIcons[cap.id]} size={28} />
+                    )}
+                  </div>
+                  <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">
+                    {cap.title}
+                  </h3>
+                </div>
+
+                {/* Right: description + specs */}
+                <div className="space-y-4">
+                  <p className="text-muted-foreground leading-relaxed">
+                    {cap.description}
                   </p>
-                  <CardTitle
-                    className={cn(
-                      'tracking-tight',
-                      idx === 0 ? 'text-3xl' : 'text-2xl',
-                    )}
-                  >
-                    {feature.title}
-                  </CardTitle>
-                  <CardDescription className="text-base leading-relaxed">
-                    {feature.summary}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <div
-                    className={cn(
-                      'grid gap-3',
-                      idx === 0 ? 'sm:grid-cols-3' : 'sm:grid-cols-1',
-                    )}
-                  >
-                    {feature.points.map((point) => (
-                      <div
-                        key={point}
-                        className="bg-muted/35 rounded-xl border px-4 py-3 text-sm leading-relaxed"
+                  <div className="flex flex-wrap gap-2">
+                    {cap.specs.map((spec) => (
+                      <span
+                        key={spec}
+                        className="rounded-md border border-border/70 bg-muted/30 px-2 py-1 font-mono text-[0.7rem] leading-none text-foreground/70"
                       >
-                        {point}
-                      </div>
+                        {spec}
+                      </span>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </section>
@@ -231,7 +229,7 @@ export default function HomeRoute() {
         <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-12 sm:pb-20">
           <Card className="border-border/70 from-muted/25 to-background bg-linear-to-b">
             <CardHeader>
-              <CardTitle className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              <CardTitle className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 Format badges
               </CardTitle>
               <CardDescription className="max-w-3xl text-base leading-relaxed">
@@ -359,8 +357,8 @@ export default function HomeRoute() {
                     target="_blank"
                     rel="noreferrer"
                     className={cn(
-                      buttonVariants({ size: 'lg', variant: 'outline' }),
-                      'min-w-48',
+                      buttonVariants({ size: "lg", variant: "outline" }),
+                      "min-w-48",
                     )}
                   >
                     View Source Code

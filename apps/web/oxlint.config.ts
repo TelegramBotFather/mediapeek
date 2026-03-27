@@ -12,6 +12,14 @@ export default defineConfig({
     },
   ],
   ignorePatterns: ['build/**', '.react-router/**', '.wrangler/**'],
+  overrides: [
+    {
+      files: ['app/routes/home/route.tsx'],
+      rules: {
+        'react/iframe-missing-sandbox': 'off',
+      },
+    },
+  ],
   rules: {
     'jest/no-conditional-expect': 'off',
     'react-in-jsx-scope': 'off',
