@@ -13,9 +13,5 @@
     "./react-library": "./react-library.json",
     "./react-router": "./react-router.json",
     "./hono": "./hono.json"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.0.2"
   }
 }

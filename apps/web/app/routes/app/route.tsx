@@ -1,9 +1,9 @@
+import type { Route } from './+types/route';
+
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
 import { MediaForm } from '~/components/media-form';
 import { useHydrated } from '~/hooks/use-hydrated';
-
-import type { Route } from './+types/route';
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -27,7 +27,7 @@ export default function AppRoute() {
           <MediaForm />
         ) : (
           <div className="flex w-full max-w-3xl animate-pulse flex-col gap-8 py-8">
-            <div className="rounded-lg bg-muted/20 h-32 w-full" />
+            <div className="bg-muted/20 h-32 w-full rounded-lg" />
             <div className="bg-muted/20 h-64 w-full rounded-lg" />
           </div>
         )}

@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo } from 'react';
 
 import { VideoTrackItem } from '~/components/media-view/video-track-item';
-import type { MediaTrackJSON } from '~/types/media';
 
 export const VideoSection = memo(function VideoSection({
   videoTracks,

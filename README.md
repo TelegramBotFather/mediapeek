@@ -10,6 +10,31 @@ The website root (`/`) is the product homepage, and the live analyzer interface 
 
 ![MediaPeek Demo](resources/preview.png)
 
+## Development
+
+Run workspace commands from the repo root:
+
+```bash
+pnpm install
+pnpm dev
+pnpm lint
+pnpm fmt
+pnpm fmt:check
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+This repo uses `oxlint` + `oxfmt` and checks in VS Code workspace settings for the `oxc.oxc-vscode` extension. The sample project under `sample/react-router-monorepo` is reference-only and is not part of the main workspace migration.
+
+To add a shared shadcn component, use the app config entrypoint from the repo root:
+
+```bash
+pnpm dlx shadcn@latest add button -c apps/web
+```
+
+This workflow keeps generated shared UI components in `packages/ui/src/components`.
+
 ## Features
 
 ### Edge Analysis

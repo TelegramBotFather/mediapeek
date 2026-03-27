@@ -81,7 +81,9 @@ export function parseContentDispositionFilename(
   if (utf8Match?.[1]) {
     try {
       const decoded = decodeURIComponent(utf8Match[1]);
-      return isValidFilename(decoded) ? normalizeFilenameCandidate(decoded) : undefined;
+      return isValidFilename(decoded)
+        ? normalizeFilenameCandidate(decoded)
+        : undefined;
     } catch {
       // Fall through to plain filename parsing.
     }

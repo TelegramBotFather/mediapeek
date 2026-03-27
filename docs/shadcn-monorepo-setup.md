@@ -1,5 +1,12 @@
 # Shadcn UI + Tailwind CSS v4 Monorepo Setup Guide
 
+This repo follows an app-config plus shared-UI workflow:
+
+- Run shadcn from the repo root with `pnpm dlx shadcn@latest add <component> -c apps/web`
+- Keep generated shared UI components in `packages/ui/src/components`
+- Keep app-only code in `apps/web/app/components`, `apps/web/app/hooks`, and `apps/web/app/lib`
+- The sample repo in `sample/react-router-monorepo` is only a reference and is not part of the main workspace tooling migration
+
 ## The "Missing Classes" Issue
 
 When using Shadcn UI components in a monorepo with Tailwind CSS v4, you may encounter an issue where utility classes (especially for components like `Button`, `Input`, `Dialog`, etc.) are not generated, resulting in unstyled components.

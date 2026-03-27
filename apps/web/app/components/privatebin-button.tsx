@@ -135,11 +135,7 @@ export function PrivateBinButton({ content }: PrivateBinButtonProps) {
             transition={QuickTransition}
           >
             <Button variant="destructive" size="sm" disabled>
-              <Icon
-                icon={AlertCircleIcon}
-                size={16}
-                className="mr-2"
-              />
+              <Icon icon={AlertCircleIcon} size={16} className="mr-2" />
               Upload Failed
             </Button>
           </motion.div>

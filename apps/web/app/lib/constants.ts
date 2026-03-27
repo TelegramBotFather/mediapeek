@@ -5,9 +5,7 @@ interface WindowEnv {
 }
 
 export function getTurnstileSiteKey(): string {
-  const fallbackSiteKey = import.meta.env.DEV
-    ? '1x00000000000000000000AA'
-    : '';
+  const fallbackSiteKey = import.meta.env.DEV ? '1x00000000000000000000AA' : '';
 
   if (typeof window !== 'undefined') {
     const win = window as unknown as WindowEnv;

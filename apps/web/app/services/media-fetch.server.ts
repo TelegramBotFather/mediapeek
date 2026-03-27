@@ -1,6 +1,6 @@
 import {
-  inspectArchiveEntry,
   type ArchiveEntryInspection,
+  inspectArchiveEntry,
 } from '@mediapeek/shared/archive-inspection';
 import {
   type FilenameSource,
@@ -70,6 +70,13 @@ const resolveResponseFileSize = (response: Response): number | undefined => {
   return parseInt(contentLength, 10);
 };
 
+const isHtmlResponse = (response: Response) =>
+  response.headers.get('content-type')?.toLowerCase().includes('text/html') ??
+  false;
+
+const didHonorRangeRequest = (response: Response) =>
+  response.status === 206 || response.headers.has('content-range');
+
 const assertByteFetchStatus = (res: Response) => {
   if (res.status === 200 || res.status === 206) return;
   if (res.status === 404) {
@@ -80,7 +87,9 @@ const assertByteFetchStatus = (res: Response) => {
       'Access denied while fetching media bytes. The link may have expired or blocked server-side fetches.',
     );
   }
-  throw new Error(`Unable to retrieve media bytes (HTTP ${String(res.status)}).`);
+  throw new Error(
+    `Unable to retrieve media bytes (HTTP ${String(res.status)}).`,
+  );
 };
 
 const readFirstChunkWithTimeout = async (
@@ -88,10 +97,11 @@ const readFirstChunkWithTimeout = async (
   timeoutMs: number,
 ) => {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    (timeoutId = setTimeout(() => {
-      reject(new Error('Fetch stream read timed out'));
-    }, timeoutMs)),
+  const timeoutPromise = new Promise<never>(
+    (_, reject) =>
+      (timeoutId = setTimeout(() => {
+        reject(new Error('Fetch stream read timed out'));
+      }, timeoutMs)),
   );
 
   try {
@@ -152,11 +162,9 @@ const readCompressedPrefix = async (
       controller.close();
     },
   });
-  const decompressor =
-    new DecompressionStream('deflate-raw') as unknown as ReadableWritablePair<
-      Uint8Array,
-      Uint8Array
-    >;
+  const decompressor = new DecompressionStream(
+    'deflate-raw',
+  ) as unknown as ReadableWritablePair<Uint8Array, Uint8Array>;
   const reader = inputStream.pipeThrough(decompressor).getReader();
 
   const tempBuffer = new Uint8Array(limit);
@@ -249,7 +257,9 @@ const fetchZipTailBuffer = async (
 
   const start = Math.max(0, totalSize - ZIP_TAIL_INSPECTION_BYTES);
   const response = await fetch(url, {
-    headers: getEmulationHeaders(`bytes=${String(start)}-${String(totalSize - 1)}`),
+    headers: getEmulationHeaders(
+      `bytes=${String(start)}-${String(totalSize - 1)}`,
+    ),
     redirect: 'follow',
   });
   if (response.status !== 200 && response.status !== 206) {
@@ -291,17 +301,6 @@ export async function fetchMediaChunk(
   diagnostics.headRequestDurationMs = Math.round(performance.now() - tHead);
   diagnostics.probeMethod = probeMethod;
 
-  const contentType = headRes.headers.get('content-type');
-  if (contentType?.includes('text/html')) {
-    if (isGoogleDrive) {
-      throw new Error('Google Drive file is rate-limited. Try again in 24 hours.');
-    }
-
-    throw new Error(
-      'URL links to a webpage, not a media file. Provide a direct link.',
-    );
-  }
-
   if (!headRes.ok) {
     if (headRes.status === 404) {
       throw new Error('Media file not found. Check the URL.');
@@ -338,7 +337,8 @@ export async function fetchMediaChunk(
   let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
   let firstChunk: Uint8Array | null = null;
   let firstByteTimeoutRetries = 0;
-  let firstByteReadStrategy: FetchDiagnostics['firstByteReadStrategy'] = 'range';
+  let firstByteReadStrategy: FetchDiagnostics['firstByteReadStrategy'] =
+    'range';
   let rangeReadTimedOut = false;
 
   for (let attempt = 0; attempt <= MAX_FIRST_BYTE_READ_RETRIES; attempt += 1) {
@@ -425,9 +425,24 @@ export async function fetchMediaChunk(
     throw new Error('Failed to retrieve response body stream');
   }
 
+  if (isHtmlResponse(response)) {
+    void reader.cancel();
+    if (isGoogleDrive) {
+      throw new Error(
+        'Google Drive file is rate-limited. Try again in 24 hours.',
+      );
+    }
+
+    throw new Error(
+      'URL links to a webpage, not a media file. Provide a direct link.',
+    );
+  }
+
   if (!fileSize) {
     fileSize = resolveResponseFileSize(response);
   }
+
+  const supportsRemoteSeekReads = didHonorRangeRequest(response);
 
   if (filenameSource === 'url') {
     const getFilename = parseContentDispositionFilename(
@@ -467,7 +482,8 @@ export async function fetchMediaChunk(
       if (
         archiveEntry.archiveKind === 'zip' &&
         archiveEntry.sizeStatus === 'estimated' &&
-        fileSize !== undefined
+        fileSize !== undefined &&
+        supportsRemoteSeekReads
       ) {
         const tailBuffer = await fetchZipTailBuffer(targetUrl, fileSize);
         const tailResolvedEntry = tailBuffer

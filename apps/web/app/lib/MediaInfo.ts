@@ -1,5 +1,3 @@
-import { FLOAT_FIELDS, INT_FIELDS } from '@mediapeek/shared/media-info-result';
-
 import type {
   AnalyzeCallback,
   MediaInfoInstance,
@@ -8,6 +6,8 @@ import type {
   MediaInfoResult,
   ReadChunkCallback,
 } from '~/types/mediainfo-wasm';
+
+import { FLOAT_FIELDS, INT_FIELDS } from '@mediapeek/shared/media-info-result';
 
 import { unknownToError } from './error';
 

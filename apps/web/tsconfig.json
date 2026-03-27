@@ -2,7 +2,6 @@
   "extends": "@mediapeek/config-typescript/react-router",
   "compilerOptions": {
     "types": ["node", "vite/client"],
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"],
       "@mediapeek/ui/*": ["../../packages/ui/src/*"],

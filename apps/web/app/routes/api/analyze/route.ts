@@ -1,11 +1,14 @@
+import type { Route } from './+types/route';
 import type { AnalyzeErrorCode } from '@mediapeek/shared/analyze-contract';
+import type { AppType } from 'mediapeek-analyzer';
+import type { MediaInfoDiagnostics } from '~/services/mediainfo.server';
+
 import {
   redactSensitiveUrl,
   summarizeSensitiveToken,
 } from '@mediapeek/shared/log-redaction';
 import { analyzeSchema } from '@mediapeek/shared/schemas';
 import { hc } from 'hono/client';
-import type { AppType } from 'mediapeek-analyzer';
 
 import { log, type LogContext, requestStorage } from '~/lib/logger.server';
 import { TurnstileResponseSchema } from '~/lib/schemas/turnstile';
@@ -16,10 +19,7 @@ import {
   verifyTurnstileGrantToken,
 } from '~/lib/turnstile-grant.server';
 import { mediaPeekEmitter } from '~/services/event-bus.server';
-import type { MediaInfoDiagnostics } from '~/services/mediainfo.server';
 import { initTelemetry } from '~/services/telemetry.server';
-
-import type { Route } from './+types/route';
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const DEFAULT_RATE_LIMIT_PER_MINUTE = 30;
@@ -177,11 +177,14 @@ const buildSuccessResponse = (
   results: Record<string, string>,
   headers?: HeadersInit,
 ) =>
-  Response.json({
-    success: true,
-    requestId,
-    results,
-  }, { headers });
+  Response.json(
+    {
+      success: true,
+      requestId,
+      results,
+    },
+    { headers },
+  );
 
 const isCpuLimitError = (error: unknown) => {
   if (!(error instanceof Error)) return false;
@@ -243,8 +246,15 @@ const buildTooManyRequestsResponse = (
   requestId: string,
   retryAfterSec = 60,
   headers?: HeadersInit,
-) =>
-  Response.json(
+) => {
+  const responseHeaders =
+    headers instanceof Headers
+      ? Object.fromEntries(headers.entries())
+      : Array.isArray(headers)
+        ? Object.fromEntries(headers)
+        : (headers ?? {});
+
+  return Response.json(
     {
       success: false,
       requestId,
@@ -257,11 +267,12 @@ const buildTooManyRequestsResponse = (
     {
       status: 429,
       headers: {
-        ...(headers ?? {}),
+        ...responseHeaders,
         'Retry-After': String(Math.max(1, Math.ceil(retryAfterSec))),
       },
     },
   );
+};
 
 async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
   initTelemetry();
@@ -331,7 +342,9 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
       ).ANALYZE_RATE_LIMITER;
       if (rateLimiter) {
         try {
-          const outcome = await rateLimiter.limit({ key: getClientIp(request) });
+          const outcome = await rateLimiter.limit({
+            key: getClientIp(request),
+          });
           if (!outcome.success) {
             status = 429;
             severity = 'WARNING';
@@ -366,7 +379,9 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
       }
 
       const parsedInput = await parseAnalyzeInput(request, url);
-      const compatibilityHeaders = getCompatibilityHeaders(parsedInput.legacyGet);
+      const compatibilityHeaders = getCompatibilityHeaders(
+        parsedInput.legacyGet,
+      );
       if (parsedInput.legacyGet) {
         customContext.apiContract = 'legacy_get_query';
       } else {
@@ -418,7 +433,8 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
       const turnstileToken = request.headers.get('CF-Turnstile-Response');
       const enableTurnstile =
         (context.cloudflare.env.ENABLE_TURNSTILE as string) === 'true';
-      const secretKey = context.cloudflare.env.TURNSTILE_SECRET_KEY?.trim() ?? '';
+      const secretKey =
+        context.cloudflare.env.TURNSTILE_SECRET_KEY?.trim() ?? '';
       const grantSecret =
         context.cloudflare.env.TURNSTILE_GRANT_SECRET?.trim() ?? '';
       const turnstileTokenSummary = summarizeSensitiveToken(turnstileToken);
@@ -615,9 +631,8 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
         customContext.errorClass = 'ANALYZER_INVALID_RESPONSE';
         const preview = (await rpcResponse.text()).slice(0, 240);
         customContext.analyzerResponsePreview = preview;
-        const isMissingLocalDevSession = /couldn't find a local dev session/i.test(
-          preview,
-        );
+        const isMissingLocalDevSession =
+          /couldn't find a local dev session/i.test(preview);
         return buildErrorResponse(
           requestId,
           502,
@@ -671,17 +686,29 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
         }
 
         // Backend Error
-        // Explicitly narrow the type for TS
         const backendError = errorData as {
           code: AnalyzeErrorCode;
           message: string;
+          retryable?: boolean;
         };
         const { code, message } = backendError;
         status = rpcResponse.status;
         severity = status >= 500 ? 'ERROR' : 'WARNING';
-        customContext.errorClass = `ANALYZE_${code}`;
+        customContext.errorClass =
+          code === 'VALIDATION_FAILED'
+            ? 'ANALYZE_VALIDATION_FAILED'
+            : code === 'RATE_LIMITED'
+              ? 'ANALYZE_RATE_LIMITED'
+              : `ANALYZE_${code}`;
 
-        throw new Error(message); // Re-throw to be caught by catch block below for unified error handling
+        return buildErrorResponse(
+          requestId,
+          status,
+          code,
+          message,
+          backendError.retryable ?? false,
+          compatibilityHeaders,
+        );
       }
 
       if (!rpcData.results || !rpcData.diagnostics) {
@@ -714,7 +741,8 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
         customContext.fileSize = rpcData.fileSize;
       }
       customContext.filename =
-        diagnostics.analysis.resolvedFilename ?? diagnostics.fetch.resolvedFilename;
+        diagnostics.analysis.resolvedFilename ??
+        diagnostics.fetch.resolvedFilename;
       customContext.filenameSource =
         diagnostics.analysis.resolvedFilenameSource ??
         diagnostics.fetch.resolvedFilenameSource;

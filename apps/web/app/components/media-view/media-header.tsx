@@ -1,9 +1,10 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { Separator } from '@mediapeek/ui/components/separator';
 import { memo, useMemo, useState } from 'react';
 
 import { OptionsMenu } from '~/components/media-view/options-menu';
 import { getMediaBadges, isValidFilename } from '~/lib/media-utils';
-import type { MediaTrackJSON } from '~/types/media';
 
 import { ArchiveEstimateTooltip } from './archive-estimate-tooltip';
 import { MediaIcon } from './media-icon';

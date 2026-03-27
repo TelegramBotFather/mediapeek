@@ -47,11 +47,7 @@ function SubmitButton({ pending }: { pending: boolean }) {
   return (
     <InputGroupButton type="submit" disabled={pending}>
       {pending ? (
-        <Icon
-          icon={Loading03Icon}
-          size={16}
-          className="animate-spin"
-        />
+        <Icon icon={Loading03Icon} size={16} className="animate-spin" />
       ) : (
         <Icon icon={ArrowRight01Icon} size={16} />
       )}
@@ -131,7 +127,8 @@ const ANALYZE_REQUEST_TIMEOUT_MS = 90_000;
 const MAX_ANALYZE_RETRIES = 2;
 const RETRY_BACKOFF_MS = 1_500;
 const SLOW_STATUS_DELAY_MS = 5_000;
-const SLOW_STATUS_MESSAGE = 'Source server is taking longer than usual. Still trying...';
+const SLOW_STATUS_MESSAGE =
+  'Source server is taking longer than usual. Still trying...';
 const RETRYABLE_HTTP_STATUSES = new Set([502, 503, 504]);
 
 export function MediaForm() {
@@ -497,7 +494,8 @@ export function MediaForm() {
                   if (!open && isPending) return;
 
                   if (!open) {
-                    const hadPendingSubmit = pendingFormDataRef.current !== null;
+                    const hadPendingSubmit =
+                      pendingFormDataRef.current !== null;
                     const hadTokenRequest =
                       turnstileTokenResolverRef.current !== null;
                     pendingFormDataRef.current = null;

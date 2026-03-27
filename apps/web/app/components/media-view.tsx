@@ -1,5 +1,7 @@
 'use client';
 
+import type { MediaInfoJSON, MediaTrackJSON } from '~/types/media';
+
 import { ArrowExpandIcon, ArrowShrink02Icon } from '@hugeicons/core-free-icons';
 import { Button } from '@mediapeek/ui/components/button';
 import { Icon } from '@mediapeek/ui/components/icon';
@@ -20,7 +22,6 @@ import {
 import { fetchAnalyzeFormat } from '~/lib/analyze-client';
 import { removeEmptyStrings } from '~/lib/media-utils';
 import { startNativeViewTransition } from '~/lib/view-transition';
-import type { MediaInfoJSON, MediaTrackJSON } from '~/types/media';
 
 import { AccessibilitySection } from './media-view/accessibility-section';
 import { AudioSection } from './media-view/audio-section';
@@ -116,13 +117,7 @@ export const MediaView = memo(function MediaView({
     return () => {
       cancelled = true;
     };
-  }, [
-    data.text,
-    fetchedText,
-    isTextView,
-    requestTurnstileToken,
-    url,
-  ]);
+  }, [data.text, fetchedText, isTextView, requestTurnstileToken, url]);
 
   // Handle Escape key to exit full screen
   useEffect(() => {
@@ -334,9 +329,9 @@ export const MediaView = memo(function MediaView({
           <GeneralSection generalTrack={General} />
           <VideoSection
             videoTracks={VideoTracks}
-            archiveSizingWarning={General?.Archive_Sizing_Warning as
-              | string
-              | undefined}
+            archiveSizingWarning={
+              General?.Archive_Sizing_Warning as string | undefined
+            }
           />
           <AudioSection
             audioTracks={AudioTracks}

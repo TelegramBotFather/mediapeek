@@ -55,6 +55,14 @@ const isCpuLimitError = (error: unknown) => {
   return /cpu budget exceeded/i.test(error.message);
 };
 
+const isRateLimitedFetchError = (message: string) =>
+  /rate-limited/i.test(message);
+
+const isValidationFetchError = (message: string) =>
+  /webpage, not a media file|provide a direct link|media file not found|access denied/i.test(
+    message,
+  );
+
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Health check
@@ -209,7 +217,17 @@ const routes = app.post(
           customContext.errorClass = 'CPU_LIMIT_EXCEEDED';
         } else if (error instanceof Error) {
           message = error.message;
-          if (/fetch stream|unable to access file/i.test(message)) {
+          if (isRateLimitedFetchError(message)) {
+            status = 429;
+            code = 'RATE_LIMITED';
+            retryable = true;
+            customContext.errorClass = 'ANALYZE_RATE_LIMITED';
+          } else if (isValidationFetchError(message)) {
+            status = 400;
+            code = 'VALIDATION_FAILED';
+            retryable = false;
+            customContext.errorClass = 'ANALYZE_VALIDATION_FAILED';
+          } else if (/fetch stream|unable to access file/i.test(message)) {
             status = 502;
             code = 'UPSTREAM_FETCH_FAILED';
             retryable = true;

@@ -38,8 +38,8 @@ const isLikelyAbsoluteUrl = (value: string) =>
 export const isSensitiveQueryParam = (param: string) => {
   const normalized = param.trim().toLowerCase();
   if (SENSITIVE_QUERY_KEYS[normalized]) return true;
-  return SENSITIVE_QUERY_PREFIXES.some((prefix) =>
-    normalized.slice(0, prefix.length) === prefix,
+  return SENSITIVE_QUERY_PREFIXES.some(
+    (prefix) => normalized.slice(0, prefix.length) === prefix,
   );
 };
 
@@ -98,8 +98,8 @@ const redactInternal = (value: unknown, keyHint?: string): unknown => {
   return result;
 };
 
-export const redactSensitiveLogData = <T>(value: T): T =>
-  redactInternal(value) as T;
+export const redactSensitiveLogData = (value: unknown): unknown =>
+  redactInternal(value);
 
 export const summarizeSensitiveToken = (token: string | null | undefined) => {
   const normalized = token?.trim() ?? '';

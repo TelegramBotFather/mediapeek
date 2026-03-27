@@ -31,7 +31,10 @@ const createMockZipWithDirectory = (): Uint8Array => {
   fileView.setUint16(26, fileName.length, true);
   fileView.setUint16(28, 0, true);
   fileHeader.set(fileName, 30);
-  fileHeader.set(new Uint8Array([0xaa, 0xbb, 0xcc, 0xdd]), 30 + fileName.length);
+  fileHeader.set(
+    new Uint8Array([0xaa, 0xbb, 0xcc, 0xdd]),
+    30 + fileName.length,
+  );
 
   const buffer = new Uint8Array(dirHeader.length + fileHeader.length);
   buffer.set(dirHeader, 0);
@@ -67,8 +70,7 @@ describe('fetchMediaChunk', () => {
           headers: {
             'content-type': 'application/octet-stream',
             'content-range': 'bytes 0-3/4373212360',
-            'content-disposition':
-              `attachment; filename="${proxiedFilename}"`,
+            'content-disposition': `attachment; filename="${proxiedFilename}"`,
           },
         }),
       );
@@ -77,6 +79,34 @@ describe('fetchMediaChunk', () => {
 
     expect(result.fileSize).toBe(4_373_212_360);
     expect(result.filename).toBe(proxiedFilename);
+    expect(result.filenameSource).toBe('content-disposition-get');
+  });
+
+  it('does not reject a direct media URL just because the HEAD probe returns HTML', async () => {
+    vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(
+        makeResponse(null, {
+          status: 200,
+          headers: {
+            'content-type': 'text/html; charset=UTF-8',
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        makeResponse(new Uint8Array([0, 1, 2, 3]), {
+          status: 206,
+          headers: {
+            'content-type': 'application/octet-stream',
+            'content-range': 'bytes 0-3/4',
+            'content-disposition': 'attachment; filename="from-get.mp4"',
+          },
+        }),
+      );
+
+    const result = await fetchMediaChunk('https://example.com/tokenized-media');
+
+    expect(result.fileSize).toBe(4);
+    expect(result.filename).toBe('from-get.mp4');
     expect(result.filenameSource).toBe('content-disposition-get');
   });
 
@@ -140,8 +170,8 @@ describe('fetchMediaChunk', () => {
       .mockResolvedValueOnce(
         makeResponse(
           new Uint8Array([
-            10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-            26, 27, 28, 29,
+            10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+            27, 28, 29,
           ]),
           {
             status: 206,
@@ -169,5 +199,35 @@ describe('fetchMediaChunk', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(3);
     expect(result.diagnostics.seekFetchCount).toBe(1);
     expect(result.diagnostics.seekBytesFetched).toBe(20);
+  });
+
+  it('does not expose a remote seek reader when the origin ignores the range request', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+
+    fetchSpy
+      .mockResolvedValueOnce(
+        makeResponse(null, {
+          status: 200,
+          headers: {
+            'content-type': 'application/octet-stream',
+            'content-length': '30',
+            'content-disposition': 'attachment; filename="sample.mkv"',
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        makeResponse(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), {
+          status: 200,
+          headers: {
+            'content-type': 'application/octet-stream',
+            'content-length': '30',
+          },
+        }),
+      );
+
+    const result = await fetchMediaChunk('https://example.com/non-range');
+
+    expect(result.byteSource).toBeUndefined();
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
   });
 });

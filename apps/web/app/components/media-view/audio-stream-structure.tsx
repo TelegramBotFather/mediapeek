@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo, useMemo } from 'react';
 
 import { StructureBlock } from '~/components/media-view/structure-block';
-import type { MediaTrackJSON } from '~/types/media';
 
 interface AudioStreamStructureProps {
   track: MediaTrackJSON;

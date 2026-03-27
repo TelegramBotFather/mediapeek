@@ -45,7 +45,8 @@ const getErrorMessage = (response: AnalyzeResponseShape) => {
   }
 
   return (
-    response.error?.message ?? 'Unable to analyze URL. Verify the link is correct.'
+    response.error?.message ??
+    'Unable to analyze URL. Verify the link is correct.'
   );
 };
 

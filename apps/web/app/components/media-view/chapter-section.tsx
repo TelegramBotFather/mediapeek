@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo } from 'react';
 
 import { parseChapters } from '~/lib/media-utils';
-import type { MediaTrackJSON } from '~/types/media';
 
 export const ChapterSection = memo(function ChapterSection({
   menuTrack,

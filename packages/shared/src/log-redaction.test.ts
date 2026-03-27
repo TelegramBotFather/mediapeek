@@ -28,10 +28,13 @@ describe('redactSensitiveLogData', () => {
     };
     const redacted = redactSensitiveLogData(payload);
 
-    expect(redacted.token).toBe('[REDACTED]');
-    expect(redacted.nested.authorization).toBe('[REDACTED]');
-    expect(redacted.url).toContain('sig=[REDACTED]');
-    expect(redacted.url).toContain('expires=[REDACTED]');
+    expect(redacted).toStrictEqual({
+      token: '[REDACTED]',
+      nested: {
+        authorization: '[REDACTED]',
+      },
+      url: 'https://cdn.example.com/a.mkv?sig=[REDACTED]&expires=[REDACTED]',
+    });
   });
 });
 

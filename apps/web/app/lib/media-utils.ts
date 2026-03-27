@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { extractFirstFileFromArchive as inspectFirstArchiveFile } from '@mediapeek/shared/archive-inspection';
 
 import { MEDIA_CONSTANTS } from '~/lib/media/constants';
-import type { MediaTrackJSON } from '~/types/media';
 export { isValidFilename } from '@mediapeek/shared/filename-resolution';
 
 /**

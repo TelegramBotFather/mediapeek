@@ -4,29 +4,54 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "clean": "rm -rf dist .turbo node_modules"
+    "lint": "cd ../.. && oxlint packages/shared",
+    "clean": "rm -rf dist node_modules"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@mediapeek/config-eslint": "workspace:*",
     "@mediapeek/config-typescript": "workspace:*",
-    "eslint": "^10.0.2",
-    "globals": "^17.4.0",
-    "vitest": "^4.0.18"
+    "@types/node": "^25.5.0",
+    "vitest": "^4.1.2"
   },
   "exports": {
-    "./analyze-contract": "./src/analyze-contract.ts",
-    "./archive-inspection": "./src/archive-inspection.ts",
-    "./telemetry": "./src/telemetry.ts",
-    "./schemas": "./src/schemas.ts",
-    "./media": "./src/media.ts",
-    "./filename-resolution": "./src/filename-resolution.ts",
-    "./media-info-result": "./src/media-info-result.ts",
-    "./runtime-config": "./src/runtime-config.ts",
-    "./log-redaction": "./src/log-redaction.ts"
+    "./analyze-contract": {
+      "types": "./dist/analyze-contract.d.ts",
+      "default": "./src/analyze-contract.ts"
+    },
+    "./archive-inspection": {
+      "types": "./dist/archive-inspection.d.ts",
+      "default": "./src/archive-inspection.ts"
+    },
+    "./telemetry": {
+      "types": "./dist/telemetry.d.ts",
+      "default": "./src/telemetry.ts"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "default": "./src/schemas.ts"
+    },
+    "./media": {
+      "types": "./dist/media.d.ts",
+      "default": "./src/media.ts"
+    },
+    "./filename-resolution": {
+      "types": "./dist/filename-resolution.d.ts",
+      "default": "./src/filename-resolution.ts"
+    },
+    "./media-info-result": {
+      "types": "./dist/media-info-result.d.ts",
+      "default": "./src/media-info-result.ts"
+    },
+    "./runtime-config": {
+      "types": "./dist/runtime-config.d.ts",
+      "default": "./src/runtime-config.ts"
+    },
+    "./log-redaction": {
+      "types": "./dist/log-redaction.d.ts",
+      "default": "./src/log-redaction.ts"
+    }
   },
   "dependencies": {
     "zod": "^4.3.6"

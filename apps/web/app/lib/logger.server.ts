@@ -1,10 +1,9 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
-
 import { redactSensitiveLogData } from '@mediapeek/shared/log-redaction';
 import {
   DEFAULT_RUNTIME_CONFIG,
   type RuntimeConfig,
 } from '@mediapeek/shared/runtime-config';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 // Hardcoded service metadata for now.
 // In a real build pipeline, these would be injected via define variables or env vars.
@@ -73,7 +72,10 @@ function shouldSample(event: LogEvent, runtimeConfig: RuntimeConfig): boolean {
  * Adheres to: internal-docs/logging_standards.md
  * Output: Single line JSON object
  */
-export function log(event: LogEvent, options?: { runtimeConfig?: RuntimeConfig }) {
+export function log(
+  event: LogEvent,
+  options?: { runtimeConfig?: RuntimeConfig },
+) {
   const store = requestStorage.getStore();
   const runtimeConfig =
     options?.runtimeConfig ?? store?.runtimeConfig ?? DEFAULT_RUNTIME_CONFIG;

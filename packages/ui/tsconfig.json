@@ -1,11 +1,11 @@
 {
   "extends": "@mediapeek/config-typescript/react-library",
   "compilerOptions": {
-    "baseUrl": ".",
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "jsx": "react-jsx",
     "paths": {
       "@mediapeek/ui/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }

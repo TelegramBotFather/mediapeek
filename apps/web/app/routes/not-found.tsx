@@ -1,9 +1,9 @@
+import type { Route } from './+types/not-found';
+
 import { data, Link } from 'react-router';
 
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
-
-import type { Route } from './+types/not-found';
 
 export const loader = () => data(null, { status: 404 });
 

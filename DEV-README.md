@@ -11,16 +11,20 @@
 
 - Use repo root for almost everything
 - Use `pnpm --filter ...` for one workspace
-- Use `packages/ui` for shadcn updates
+- Use `apps/web` as the shadcn entrypoint config
+- Let `packages/ui` own the generated shared shadcn components
 - Do not run shadcn in `packages/shared`
 
 ## Important Notes
 
-- The recommended place to run `pnpm dlx shadcn@latest --all --overwrite` is `packages/ui`
-- Running `pnpm dlx shadcn@latest --all --overwrite` inside `apps/web` also works in this repo
+- Run shadcn from the repo root with the app config: `pnpm dlx shadcn@latest add <component> -c apps/web`
+- The app config resolves shared UI output into `packages/ui/src/components`
+- Keep shared shadcn dependencies and generated components in `packages/ui`
 - Do not run shadcn commands in `packages/shared`
 - Use repo root for `pnpm install`, `pnpm update -r`, `pnpm lint`, `pnpm test`, `pnpm typecheck`, and `pnpm build`
+- Use `pnpm fmt` and `pnpm fmt:check` for Oxfmt-based formatting
 - After dependency or shadcn updates, review the git diff before committing
+- The sample app in `sample/react-router-monorepo` is reference-only; do not migrate or clean its tooling as part of main repo work
 
 ## Root Commands
 
@@ -30,6 +34,8 @@ Run from repo root:
 pnpm install
 pnpm dev
 pnpm lint
+pnpm fmt
+pnpm fmt:check
 pnpm typecheck
 pnpm test
 pnpm build
@@ -116,18 +122,16 @@ pnpm --filter @mediapeek/ui update shadcn --latest
 
 ## Shadcn Commands
 
-Preferred:
+Preferred shared UI workflow:
 
 ```bash
-cd packages/ui
-pnpm dlx shadcn@latest --all --overwrite
+pnpm dlx shadcn@latest add button -c apps/web
 ```
 
-Also works in this repo:
+This resolves aliases from `apps/web/components.json` and writes shared UI files into:
 
 ```bash
-cd apps/web
-pnpm dlx shadcn@latest --all --overwrite
+packages/ui/src/components
 ```
 
 Do not use:
@@ -172,6 +176,7 @@ Run from repo root:
 
 ```bash
 pnpm lint
+pnpm fmt:check
 pnpm typecheck
 pnpm test
 pnpm build

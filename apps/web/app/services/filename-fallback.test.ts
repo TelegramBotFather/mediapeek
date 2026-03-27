@@ -1,9 +1,10 @@
 import type { ArchiveEntryInspection } from '@mediapeek/shared/archive-inspection';
 import type { MediaInfoResult } from '~/services/mediainfo.server';
-import { fetchMediaChunk } from '~/services/media-fetch.server';
-import { analyzeMediaBuffer } from '~/services/mediainfo.server';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { fetchMediaChunk } from '~/services/media-fetch.server';
+import { analyzeMediaBuffer } from '~/services/mediainfo.server';
 
 let mockAnalyzeDataResult: MediaInfoResult = {
   media: {
@@ -11,7 +12,7 @@ let mockAnalyzeDataResult: MediaInfoResult = {
   },
 };
 
-let mockInformResult = 'General\n';
+const mockInformResult = 'General\n';
 
 vi.mock('~/services/mediainfo-factory.server', () => ({
   createMediaInfo: async () => ({
@@ -79,7 +80,10 @@ const createMockZipWithDirectory = (): Uint8Array => {
   fileView.setUint16(26, fileName.length, true);
   fileView.setUint16(28, 0, true);
   fileHeader.set(fileName, 30);
-  fileHeader.set(new Uint8Array([0xaa, 0xbb, 0xcc, 0xdd]), 30 + fileName.length);
+  fileHeader.set(
+    new Uint8Array([0xaa, 0xbb, 0xcc, 0xdd]),
+    30 + fileName.length,
+  );
 
   const buffer = new Uint8Array(dirHeader.length + fileHeader.length);
   buffer.set(dirHeader, 0);
@@ -209,8 +213,7 @@ describe('fetchMediaChunk filename fallback', () => {
           headers: {
             'content-type': 'application/octet-stream',
             'content-range': 'bytes 0-3/4373212360',
-            'content-disposition':
-              `attachment; filename="${proxiedFilename}"`,
+            'content-disposition': `attachment; filename="${proxiedFilename}"`,
           },
         }),
       );
@@ -219,6 +222,34 @@ describe('fetchMediaChunk filename fallback', () => {
 
     expect(result.fileSize).toBe(4_373_212_360);
     expect(result.filename).toBe(proxiedFilename);
+    expect(result.filenameSource).toBe('content-disposition-get');
+  });
+
+  it('does not reject a direct media URL just because the HEAD probe returns HTML', async () => {
+    vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(
+        makeResponse(null, {
+          status: 200,
+          headers: {
+            'content-type': 'text/html; charset=UTF-8',
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        makeResponse(new Uint8Array([0, 1, 2, 3]), {
+          status: 206,
+          headers: {
+            'content-type': 'application/octet-stream',
+            'content-range': 'bytes 0-3/4',
+            'content-disposition': 'attachment; filename="from-get.mp4"',
+          },
+        }),
+      );
+
+    const result = await fetchMediaChunk('https://example.com/tokenized-media');
+
+    expect(result.fileSize).toBe(4);
+    expect(result.filename).toBe('from-get.mp4');
     expect(result.filenameSource).toBe('content-disposition-get');
   });
 
@@ -278,7 +309,9 @@ describe('analyzeMediaBuffer filename fallback', () => {
       ['json'],
     );
     const json = JSON.parse(result.results.json) as MediaInfoResult;
-    const generalTrack = json.media?.track?.find((t) => t['@type'] === 'General');
+    const generalTrack = json.media?.track?.find(
+      (t) => t['@type'] === 'General',
+    );
 
     expect(result.resolvedFilename).toBe('placeholder-title-token');
     expect(result.resolvedFilenameSource).toBe('mediainfo-title');
@@ -331,7 +364,9 @@ describe('analyzeMediaBuffer filename fallback', () => {
       ['json'],
     );
     const json = JSON.parse(result.results.json) as MediaInfoResult;
-    const generalTrack = json.media?.track?.find((t) => t['@type'] === 'General');
+    const generalTrack = json.media?.track?.find(
+      (t) => t['@type'] === 'General',
+    );
 
     expect(result.resolvedFilename).toBe('from-head.mp4');
     expect(result.resolvedFilenameSource).toBe('content-disposition-head');
@@ -358,7 +393,9 @@ describe('analyzeMediaBuffer filename fallback', () => {
       ['json'],
     );
     const json = JSON.parse(result.results.json) as MediaInfoResult;
-    const generalTrack = json.media?.track?.find((t) => t['@type'] === 'General');
+    const generalTrack = json.media?.track?.find(
+      (t) => t['@type'] === 'General',
+    );
 
     expect(result.resolvedFilename).toBe('inner-video.mkv');
     expect(result.resolvedFilenameSource).toBe('archive-inner');
@@ -391,13 +428,13 @@ describe('analyzeMediaBuffer filename fallback', () => {
       archiveEntry,
     );
     const json = JSON.parse(result.results.json) as MediaInfoResult;
-    const generalTrack = json.media?.track?.find((t) => t['@type'] === 'General');
+    const generalTrack = json.media?.track?.find(
+      (t) => t['@type'] === 'General',
+    );
 
     expect(generalTrack?.Archive_Name).toBe('outer.zip');
     expect(generalTrack?.Archive_Sizing_Status).toBe('estimated');
     expect(generalTrack?.Archive_Sizing_Source).toBe('unknown');
-    expect(generalTrack?.Archive_Sizing_Warning).toContain(
-      'may be inaccurate',
-    );
+    expect(generalTrack?.Archive_Sizing_Warning).toContain('may be inaccurate');
   });
 });

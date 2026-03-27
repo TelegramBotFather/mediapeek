@@ -1,9 +1,9 @@
+import type { Route } from './+types/route';
+
 import { Link } from 'react-router';
 
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
-
-import type { Route } from './+types/route';
 
 export const meta: Route.MetaFunction = () => [
   { title: 'Terms of Use - MediaPeek' },

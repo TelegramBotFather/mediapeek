@@ -4,25 +4,34 @@
   "type": "module",
   "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "lint": "turbo run lint",
-    "format": "prettier --write .",
-    "clean": "turbo run clean && rm -rf node_modules",
+    "build": "pnpm -r --if-present run build",
+    "dev": "pnpm --parallel --stream --filter mediapeek-analyzer --filter mediapeek-web run dev",
+    "test": "pnpm -r --if-present run test",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "lint": "pnpm -r --if-present run lint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/dist apps/*/dist-electron packages/*/dist .turbo apps/*/.turbo packages/*/.turbo",
     "approve-builds": "pnpm approve-builds"
   },
   "devDependencies": {
-    "@mediapeek/config-eslint": "workspace:*",
-    "eslint": "^10.0.3",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "turbo": "^2.8.16",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "oxlint-tsgolint": "^0.18.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.2"
   },
   "pnpm": {
+    "overrides": {
+      "vite": "7.3.1"
+    },
+    "updateConfig": {
+      "ignoreDependencies": [
+        "typescript",
+        "vite"
+      ]
+    },
     "onlyBuiltDependencies": [
       "esbuild",
       "msw",

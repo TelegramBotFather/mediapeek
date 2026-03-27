@@ -1,6 +1,6 @@
-import { memo } from 'react';
-
 import type { MediaTrackJSON } from '~/types/media';
+
+import { memo } from 'react';
 
 import { MediaDetailItem } from './media-detail-item';
 

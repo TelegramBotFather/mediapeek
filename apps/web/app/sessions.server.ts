@@ -1,4 +1,5 @@
 import type { AppEnvironment } from '@mediapeek/shared/runtime-config';
+
 import { isProductionEnvironment } from '@mediapeek/shared/runtime-config';
 import { createCookieSessionStorage } from 'react-router';
 import { createThemeSessionResolver } from 'remix-themes';

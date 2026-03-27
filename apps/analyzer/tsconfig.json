@@ -7,9 +7,9 @@
       "vite/client",
       "node"
     ],
-    "baseUrl": "./src",
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./src/*"],
+      "@mediapeek/shared/*": ["../../packages/shared/src/*"]
     }
   },
   "include": ["src/**/*"]

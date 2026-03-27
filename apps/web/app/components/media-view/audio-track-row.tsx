@@ -1,3 +1,5 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { Badge } from '@mediapeek/ui/components/badge';
 import { AnimatePresence, motion } from 'motion/react';
 import { memo, useMemo } from 'react';
@@ -9,7 +11,6 @@ import {
   cleanMetadataString,
   formatAudioChannels,
 } from '~/lib/formatters';
-import type { MediaTrackJSON } from '~/types/media';
 
 interface AudioTrackRowProps {
   track: MediaTrackJSON;

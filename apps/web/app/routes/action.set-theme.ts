@@ -1,8 +1,9 @@
+import type { Route } from './+types/action.set-theme';
+
 import { createThemeAction } from 'remix-themes';
 
 import { log } from '../lib/logger.server';
 import { createThemeSessionResolverWithSecret } from '../sessions.server';
-import type { Route } from './+types/action.set-theme';
 
 export const action = (args: Route.ActionArgs) => {
   const { context, request } = args;

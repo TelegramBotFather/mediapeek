@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo } from 'react';
 
 import { getAccessibilityFeatures } from '~/lib/media-utils';
-import type { MediaTrackJSON } from '~/types/media';
 
 import { MediaIcon } from './media-icon';
 

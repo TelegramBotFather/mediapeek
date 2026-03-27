@@ -1,4 +1,5 @@
 import type { RuntimeConfig } from '@mediapeek/shared/runtime-config';
+
 import { resolveRuntimeConfig } from '@mediapeek/shared/runtime-config';
 import { createRequestHandler } from 'react-router';
 

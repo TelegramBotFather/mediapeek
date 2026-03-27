@@ -17,5 +17,8 @@
     "ui": "@mediapeek/ui/components",
     "lib": "@mediapeek/ui/lib",
     "hooks": "@mediapeek/ui/hooks"
-  }
+  },
+  "rtl": false,
+  "menuColor": "default-translucent",
+  "menuAccent": "subtle"
 }

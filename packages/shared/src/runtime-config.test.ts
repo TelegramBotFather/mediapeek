@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  DEFAULT_RUNTIME_CONFIG,
-  resolveRuntimeConfig,
-} from './runtime-config';
+import { DEFAULT_RUNTIME_CONFIG, resolveRuntimeConfig } from './runtime-config';
 
 describe('resolveRuntimeConfig', () => {
   it('uses defaults when env is missing', () => {

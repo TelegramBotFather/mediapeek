@@ -40,14 +40,19 @@ vi.mock('sonner', () => ({
 describe('useMediaActions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    safeClipboardWriteMock.mockImplementation(async (textPromise, onSuccess) => {
-      await textPromise;
-      onSuccess?.();
-    });
+    safeClipboardWriteMock.mockImplementation(
+      async (textPromise, onSuccess) => {
+        await textPromise;
+        onSuccess?.();
+      },
+    );
   });
 
   it('caches generated copy payload by format', async () => {
-    fetchAnalyzeFormatMock.mockResolvedValue({ ok: true, content: 'text-output' });
+    fetchAnalyzeFormatMock.mockResolvedValue({
+      ok: true,
+      content: 'text-output',
+    });
 
     const { result } = renderHook(() =>
       useMediaActions({

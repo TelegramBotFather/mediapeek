@@ -65,9 +65,7 @@ const fromBase64Url = (input: string) => {
   const normalized = input.replace(/-/g, '+').replace(/_/g, '/');
   const remainder = normalized.length % 4;
   const padded =
-    remainder === 0
-      ? normalized
-      : `${normalized}${'='.repeat(4 - remainder)}`;
+    remainder === 0 ? normalized : `${normalized}${'='.repeat(4 - remainder)}`;
   return decodeBase64(padded);
 };
 
@@ -138,7 +136,10 @@ export const canonicalizeAnalyzeUrl = (rawUrl: string) => {
 
 export const hashAnalyzeUrl = async (rawUrl: string) => {
   const canonical = canonicalizeAnalyzeUrl(rawUrl);
-  const digest = await crypto.subtle.digest('SHA-256', encoder.encode(canonical));
+  const digest = await crypto.subtle.digest(
+    'SHA-256',
+    encoder.encode(canonical),
+  );
   return toBase64Url(new Uint8Array(digest));
 };
 
@@ -192,7 +193,11 @@ export const verifyTurnstileGrantToken = async ({
     return { valid: false, reason: 'GRANT_MALFORMED' };
   }
 
-  if (!payload || typeof payload.e !== 'number' || typeof payload.u !== 'string') {
+  if (
+    !payload ||
+    typeof payload.e !== 'number' ||
+    typeof payload.u !== 'string'
+  ) {
     return { valid: false, reason: 'GRANT_MALFORMED' };
   }
 

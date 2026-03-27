@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo } from 'react';
 
 import { getMediaBadges } from '~/lib/media-utils';
-import type { MediaTrackJSON } from '~/types/media';
 
 import { TrademarkNotice } from './trademark-notice';
 

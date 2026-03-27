@@ -10,11 +10,13 @@ interface HeaderProps {
   sticky?: boolean;
 }
 
-const navigationItems = [
-  { label: 'App', to: '/app' },
-];
+const navigationItems = [{ label: 'App', to: '/app' }];
 
-export function Header({ className, showNav = true, sticky = true }: HeaderProps) {
+export function Header({
+  className,
+  showNav = true,
+  sticky = true,
+}: HeaderProps) {
   return (
     <header
       className={cn(
@@ -73,7 +75,6 @@ export function Header({ className, showNav = true, sticky = true }: HeaderProps
           <ModeToggle />
         </div>
       </div>
-
     </header>
   );
 }

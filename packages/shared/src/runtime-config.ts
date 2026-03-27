@@ -27,10 +27,13 @@ const APP_ENV_VALUES: AppEnvironment[] = [
   'production',
 ];
 
+const isAppEnvironment = (value: string): value is AppEnvironment =>
+  APP_ENV_VALUES.some((appEnv) => appEnv === value);
+
 const parseAppEnvironment = (value?: string): AppEnvironment => {
   if (!value) return DEFAULT_RUNTIME_CONFIG.appEnv;
-  const normalized = value.trim().toLowerCase() as AppEnvironment;
-  if (APP_ENV_VALUES.indexOf(normalized) >= 0) return normalized;
+  const normalized = value.trim().toLowerCase();
+  if (isAppEnvironment(normalized)) return normalized;
   return DEFAULT_RUNTIME_CONFIG.appEnv;
 };
 

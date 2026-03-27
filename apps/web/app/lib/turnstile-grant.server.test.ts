@@ -118,7 +118,9 @@ describe('turnstile grant cookie helpers', () => {
     const left = canonicalizeAnalyzeUrl(
       'HTTPS://EXAMPLE.COM:443/video.mp4?z=3&a=1#fragment',
     );
-    const right = canonicalizeAnalyzeUrl('https://example.com/video.mp4?a=1&z=3');
+    const right = canonicalizeAnalyzeUrl(
+      'https://example.com/video.mp4?a=1&z=3',
+    );
     expect(left).toBe(right);
   });
 });

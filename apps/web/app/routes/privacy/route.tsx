@@ -1,7 +1,7 @@
+import type { Route } from './+types/route';
+
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
-
-import type { Route } from './+types/route';
 
 export const meta: Route.MetaFunction = () => [
   { title: 'Privacy Policy - MediaPeek' },

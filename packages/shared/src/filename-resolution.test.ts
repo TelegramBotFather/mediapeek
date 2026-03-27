@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import {
   extractFilenameFromUrl,
   getMediaInfoMetadataFilename,
@@ -5,12 +7,9 @@ import {
   parseContentDispositionFilename,
 } from './filename-resolution';
 
-import { describe, expect, it } from 'vitest';
-
 describe('filename-resolution', () => {
   it('parses UTF-8 filename* values', () => {
-    const header =
-      "attachment; filename*=UTF-8''sample-placeholder-video.mkv";
+    const header = "attachment; filename*=UTF-8''sample-placeholder-video.mkv";
 
     expect(parseContentDispositionFilename(header)).toBe(
       'sample-placeholder-video.mkv',

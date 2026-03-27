@@ -1,4 +1,5 @@
-import './app.css';
+import '@mediapeek/ui/globals.css';
+import type { Route } from './+types/root';
 
 import { isDevelopmentEnvironment } from '@mediapeek/shared/runtime-config';
 import { Toaster } from '@mediapeek/ui/components/sonner';
@@ -20,7 +21,6 @@ import {
   useTheme,
 } from 'remix-themes';
 
-import type { Route } from './+types/root';
 import { RouteAnnouncer } from './components/route-announcer';
 import { log } from './lib/logger.server';
 import { createThemeSessionResolverWithSecret } from './sessions.server';
@@ -37,16 +37,6 @@ declare global {
 
 export const links: Route.LinksFunction = () => [
   { rel: 'apple-touch-icon', href: '/ios-home-screen-icon.png' },
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  {
-    rel: 'preconnect',
-    href: 'https://fonts.gstatic.com',
-    crossOrigin: 'anonymous',
-  },
-  {
-    rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
-  },
 ];
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -59,11 +49,10 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   try {
     const sessionSecret = context.cloudflare.env.SESSION_SECRET?.trim();
     if (sessionSecret) {
-      const { getTheme } =
-        await createThemeSessionResolverWithSecret(
-          sessionSecret,
-          runtimeConfig.appEnv,
-        )(request);
+      const { getTheme } = await createThemeSessionResolverWithSecret(
+        sessionSecret,
+        runtimeConfig.appEnv,
+      )(request);
       theme = getTheme();
     } else {
       log(
@@ -94,7 +83,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     );
   }
 
-  const turnstileSiteKey = context.cloudflare.env.TURNSTILE_SITE_KEY?.trim() ?? '';
+  const turnstileSiteKey =
+    context.cloudflare.env.TURNSTILE_SITE_KEY?.trim() ?? '';
 
   return {
     theme,

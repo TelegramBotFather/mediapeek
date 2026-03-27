@@ -1,3 +1,5 @@
+import type { Route } from './+types/route';
+
 import { buttonVariants } from '@mediapeek/ui/components/button';
 import {
   Card,
@@ -11,10 +13,10 @@ import { Link } from 'react-router';
 
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
+import { MediaView } from '~/components/media-view';
 import { TrademarkNotice } from '~/components/media-view/trademark-notice';
+import { homeDemoFixture } from '~/lib/home-demo-fixture';
 import { MEDIA_CONSTANTS } from '~/lib/media/constants';
-
-import type { Route } from './+types/route';
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -31,8 +33,7 @@ const features = [
   {
     id: 'edge-analysis',
     title: 'Edge Analysis',
-    summary:
-      'Fetch only the data needed instead of downloading the full file.',
+    summary: 'Fetch only the data needed instead of downloading the full file.',
     points: [
       'Uses byte-range requests to reduce transfer and wait time.',
       'Works well with large files when full downloads are unnecessary.',
@@ -42,8 +43,7 @@ const features = [
   {
     id: 'archive-extraction',
     title: 'Archive Extraction',
-    summary:
-      'Open common archives while keeping file context intact.',
+    summary: 'Open common archives while keeping file context intact.',
     points: [
       'ZIP: Supports stored and DEFLATE-compressed archives.',
       'TAR: Supports standard tar archives, including @LongLink extended headers.',
@@ -117,6 +117,12 @@ const METADATA_ENGINE = {
   },
 } as const;
 
+const homePreviewResults: Record<string, string> = {
+  object: JSON.stringify(homeDemoFixture.results.object, null, 2),
+  json: homeDemoFixture.results.json,
+  text: homeDemoFixture.results.text,
+};
+
 export default function HomeRoute() {
   return (
     <div className="flex min-h-screen flex-col font-sans">
@@ -156,12 +162,10 @@ export default function HomeRoute() {
 
         <section className="mx-auto w-full max-w-5xl px-4 pt-0 pb-16 sm:px-12 sm:pb-20">
           <div className="from-muted/30 to-background isolate overflow-hidden rounded-3xl border bg-linear-to-b p-2 shadow-sm sm:p-3">
-            <div className="bg-background overflow-hidden rounded-2xl border">
-              <iframe
-                src="/preview"
-                title="MediaPeek Preview"
-                className="h-[920px] w-full bg-transparent"
-                loading="lazy"
+            <div className="bg-background max-h-[920px] overflow-auto rounded-2xl border px-4 py-4 sm:px-8">
+              <MediaView
+                data={homePreviewResults}
+                url={homeDemoFixture.sourceUrl}
               />
             </div>
           </div>
@@ -324,10 +328,7 @@ export default function HomeRoute() {
           <div className="from-muted/35 via-background to-muted/15 border-border/70 overflow-hidden rounded-[2rem] border bg-linear-to-br">
             <div className="px-6 py-8 sm:px-10 sm:py-10">
               <div className="space-y-6">
-                <div
-                  className="inline-flex"
-                  data-testid="github-brand-lockup"
-                >
+                <div className="inline-flex" data-testid="github-brand-lockup">
                   <img
                     src="/brand/github/GitHub_Lockup_Black_Clearspace.svg"
                     alt=""
@@ -384,7 +385,9 @@ export default function HomeRoute() {
               </div>
 
               <div className="border-border/60 text-muted-foreground border-y py-4 text-sm leading-relaxed">
-                <p>Trademark notices are shown for the formats displayed above.</p>
+                <p>
+                  Trademark notices are shown for the formats displayed above.
+                </p>
               </div>
 
               <TrademarkNotice badges={trademarkBadges} />

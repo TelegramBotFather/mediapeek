@@ -1,10 +1,10 @@
+import { describe, expect, it } from 'vitest';
+
 import {
   ARCHIVE_SIZING_WARNING,
   extractFirstFileFromArchive,
   inspectArchiveEntry,
 } from './archive-inspection';
-
-import { describe, expect, it } from 'vitest';
 
 const writeUint64LE = (view: DataView, offset: number, value: number) => {
   view.setUint32(offset, value >>> 0, true);
@@ -91,7 +91,10 @@ const createCentralDirectoryEntry = ({
 };
 
 const createZipTail = (entries: Uint8Array[]) => {
-  const totalEntriesLength = entries.reduce((sum, entry) => sum + entry.length, 0);
+  const totalEntriesLength = entries.reduce(
+    (sum, entry) => sum + entry.length,
+    0,
+  );
   const tail = new Uint8Array(totalEntriesLength + 22);
   let offset = 0;
   for (const entry of entries) {
@@ -124,7 +127,9 @@ const createTarHeader = (name: string, type: string, size: number) => {
   const header = new Uint8Array(512);
   header.set(new TextEncoder().encode(name), 0);
   header.set(
-    new TextEncoder().encode(`${'00000000000'.slice(size.toString(8).length)}${size.toString(8)} `),
+    new TextEncoder().encode(
+      `${'00000000000'.slice(size.toString(8).length)}${size.toString(8)} `,
+    ),
     124,
   );
   header.set(new TextEncoder().encode(type), 156);

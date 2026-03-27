@@ -1,10 +1,10 @@
+import type { loader } from '~/root';
+
 import { cn } from '@mediapeek/ui/lib/utils';
 import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useRouteLoaderData } from 'react-router';
 import { Theme, useTheme } from 'remix-themes';
-
-import type { loader } from '~/root';
 
 export function ModeToggle() {
   const loaderData = useRouteLoaderData<typeof loader>('root');

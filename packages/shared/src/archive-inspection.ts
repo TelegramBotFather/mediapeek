@@ -108,7 +108,11 @@ const parseCentralDirectoryEntry = (
 ): { entry: ArchiveEntryInspection; nextOffset: number } | null => {
   if (offset + 46 > buffer.byteLength) return null;
 
-  const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+  const view = new DataView(
+    buffer.buffer,
+    buffer.byteOffset,
+    buffer.byteLength,
+  );
   if (view.getUint32(offset, true) !== ZIP_CENTRAL_DIRECTORY_SIGNATURE) {
     return null;
   }
@@ -279,7 +283,7 @@ const inspectZipArchiveEntry = (
     }
 
     const headerSize = 30 + fileNameLength + extraLength;
-    const skipSize = hasDataDescriptor ? 0 : compressedSize ?? 0;
+    const skipSize = hasDataDescriptor ? 0 : (compressedSize ?? 0);
     offset += headerSize + skipSize;
   }
 

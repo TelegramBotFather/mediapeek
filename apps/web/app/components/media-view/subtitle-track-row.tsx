@@ -1,9 +1,10 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { Badge } from '@mediapeek/ui/components/badge';
 import { AnimatePresence, motion } from 'motion/react';
 import { memo, useMemo } from 'react';
 
 import { cleanSubtitleTrackTitle } from '~/lib/formatters';
-import type { MediaTrackJSON } from '~/types/media';
 
 interface SubtitleTrackRowProps {
   track: MediaTrackJSON;

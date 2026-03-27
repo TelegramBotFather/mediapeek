@@ -13,6 +13,10 @@ vi.mock('~/components/header', () => ({
   Header: () => <div data-testid="header" />,
 }));
 
+vi.mock('~/components/media-view', () => ({
+  MediaView: () => <div data-testid="media-preview" />,
+}));
+
 vi.mock('~/components/media-view/trademark-notice', () => ({
   TrademarkNotice: () => <div data-testid="trademark-notice" />,
 }));
@@ -25,9 +29,7 @@ describe('HomeRoute', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByText(/browse the repository on GitHub/i),
-    ).toBeTruthy();
+    expect(screen.getByText(/browse the repository on GitHub/i)).toBeTruthy();
     expect(
       screen.getByText(/built in public, maintained on GitHub/i),
     ).toBeTruthy();
@@ -38,7 +40,9 @@ describe('HomeRoute', () => {
     expect(
       screen.getByRole('link', { name: /mediainfolib v25\.10/i }),
     ).toBeTruthy();
-    expect(container.querySelector('img[src="/badges/mediainfo.svg"]')).toBeTruthy();
+    expect(
+      container.querySelector('img[src="/badges/mediainfo.svg"]'),
+    ).toBeTruthy();
     expect(
       container.querySelector('img[src="/badges/mediainfo-light.svg"]'),
     ).toBeTruthy();
@@ -50,7 +54,9 @@ describe('HomeRoute', () => {
       'https://github.com/DG02002/mediapeek',
     );
 
-    const lockup = container.querySelector('[data-testid="github-brand-lockup"]');
+    const lockup = container.querySelector(
+      '[data-testid="github-brand-lockup"]',
+    );
     expect(lockup).toBeTruthy();
     expect(lockup?.querySelector('svg')).toBeNull();
     expect(

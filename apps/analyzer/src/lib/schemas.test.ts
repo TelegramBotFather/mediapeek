@@ -8,19 +8,17 @@ describe('analyzeSchema', () => {
     });
 
     expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.url).toBe('https://example.com/video.mp4');
-      expect(result.data.format).toEqual(['JSON']);
-    }
+    if (!result.success) throw new Error('Expected schema parsing to succeed');
+    expect(result.data.url).toBe('https://example.com/video.mp4');
+    expect(result.data.format).toEqual(['JSON']);
   });
 
   it('rejects an invalid URL', () => {
     const result = analyzeSchema.safeParse({ url: 'not-a-url' });
 
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Invalid URL provided.');
-    }
+    if (result.success) throw new Error('Expected schema parsing to fail');
+    expect(result.error.issues[0]?.message).toBe('Invalid URL provided.');
   });
 
   it('accepts array-based formats', () => {
@@ -30,8 +28,7 @@ describe('analyzeSchema', () => {
     });
 
     expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.format).toEqual(['object', 'text']);
-    }
+    if (!result.success) throw new Error('Expected schema parsing to succeed');
+    expect(result.data.format).toEqual(['object', 'text']);
   });
 });

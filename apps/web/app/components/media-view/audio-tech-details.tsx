@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo, type ReactNode, useMemo } from 'react';
 
 import { cleanBitrateString, cleanMetadataString } from '~/lib/formatters';
-import type { MediaTrackJSON } from '~/types/media';
 
 import { MediaDetailItem } from './media-detail-item';
 

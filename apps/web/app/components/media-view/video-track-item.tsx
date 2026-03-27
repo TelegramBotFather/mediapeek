@@ -1,7 +1,8 @@
+import type { MediaTrackJSON } from '~/types/media';
+
 import { memo } from 'react';
 
 import { cleanBitrateString, mapDolbyProfile } from '~/lib/formatters';
-import type { MediaTrackJSON } from '~/types/media';
 
 import { ArchiveEstimateTooltip } from './archive-estimate-tooltip';
 import { MediaDetailItem } from './media-detail-item';

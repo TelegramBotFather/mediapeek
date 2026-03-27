@@ -131,7 +131,10 @@ const removeKeywords = (text: string, keywords: string[]): string => {
     // Match isolated metadata tokens while still supporting punctuation-heavy
     // codec labels such as "DD+", "E-AC-3", and "DTS-HD".
     const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(^|[^A-Za-z0-9])${escaped}(?=$|[^A-Za-z0-9])`, 'gi');
+    const regex = new RegExp(
+      `(^|[^A-Za-z0-9])${escaped}(?=$|[^A-Za-z0-9])`,
+      'gi',
+    );
     processed = processed.replace(regex, '$1');
   }
 

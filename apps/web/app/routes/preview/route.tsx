@@ -1,7 +1,7 @@
+import type { Route } from './+types/route';
+
 import { MediaView } from '~/components/media-view';
 import { homeDemoFixture } from '~/lib/home-demo-fixture';
-
-import type { Route } from './+types/route';
 
 export const meta: Route.MetaFunction = () => [
   { title: 'Preview - MediaPeek' },

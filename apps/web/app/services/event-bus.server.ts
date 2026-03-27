@@ -1,7 +1,7 @@
-import { EventEmitter } from 'node:events';
-
 import type { FetchDiagnostics } from '~/services/media-fetch.server';
 import type { MediaInfoDiagnostics } from '~/services/mediainfo.server';
+
+import { EventEmitter } from 'node:events';
 
 /**
  * Event payloads for type safety
