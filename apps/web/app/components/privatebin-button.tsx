@@ -47,7 +47,7 @@ export function PrivateBinButton({ content }: PrivateBinButtonProps) {
       uploadPromise,
       () => {
         toast.success('Link Copied', {
-          description: 'The secure link has been copied to your clipboard.',
+          description: 'The encrypted link was copied to the clipboard.',
         });
       },
       (err: unknown) => {
@@ -61,7 +61,7 @@ export function PrivateBinButton({ content }: PrivateBinButtonProps) {
     if (link) {
       await navigator.clipboard.writeText(link);
       toast.success('Link Copied', {
-        description: 'The secure link has been copied to your clipboard.',
+        description: 'The encrypted link was copied to the clipboard.',
       });
     }
   };
@@ -81,7 +81,7 @@ export function PrivateBinButton({ content }: PrivateBinButtonProps) {
               variant="outline"
               size="sm"
               onClick={handleShare}
-              title="Share secure, self-destructing link via PrivateBin"
+              title="Share a secure, self-destructing link through PrivateBin"
             >
               <Icon icon={Shield01Icon} size={16} className="mr-2" />
               Share with PrivateBin

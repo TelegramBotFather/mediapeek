@@ -44,7 +44,10 @@ export function useMediaActions({
           toast.dismiss(toastId);
         } catch (err) {
           console.error(err);
-          toast.error(`Failed to generate ${label}`, { id: toastId });
+          toast.error(`Unable to Generate ${label}`, {
+            id: toastId,
+            description: 'Try again in a moment.',
+          });
           return null;
         }
       }
@@ -66,7 +69,9 @@ export function useMediaActions({
       const contentPromise = fetchContent(format, label).then(
         (content: string | null | undefined) => {
           if (!content) {
-            if (content === undefined) toast.error(`No ${label} data found.`);
+            if (content === undefined) {
+              toast.error(`No ${label} Data Available`);
+            }
             throw new Error('No content found');
           }
           return content;
@@ -77,8 +82,8 @@ export function useMediaActions({
         contentPromise,
         () => {
           triggerSuccess();
-          toast.success('Copied to clipboard', {
-            description: `${label} format copied successfully.`,
+          toast.success('Copied to Clipboard', {
+            description: `${label} data was copied.`,
             duration: 2000,
           });
         },
@@ -100,12 +105,13 @@ export function useMediaActions({
       const content = await fetchContent(format, label);
 
       if (!content) {
-        if (typeof content === 'undefined')
-          toast.error(`No ${label} data found.`);
+        if (typeof content === 'undefined') {
+          toast.error(`No ${label} Data Available`);
+        }
         throw new Error('No content found');
       }
 
-      const toastId = toast.loading(`Encrypting & Uploading ${label}...`);
+      const toastId = toast.loading(`Encrypting and Uploading ${label}...`);
       setIsSharing(true);
 
       try {
@@ -115,9 +121,9 @@ export function useMediaActions({
         return newUrl;
       } catch (err) {
         console.error('PrivateBin upload failed:', err);
-        toast.error('Upload Failed', {
+        toast.error('Unable to Upload', {
           id: toastId,
-          description: 'Could not upload to PrivateBin. Please try again.',
+          description: 'Could not upload to PrivateBin. Try again in a moment.',
         });
         throw err;
       } finally {

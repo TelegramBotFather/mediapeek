@@ -237,7 +237,7 @@ export function MediaForm() {
     if (!url) {
       setState({
         results: null,
-        error: 'Enter a valid URL.',
+        error: 'Enter a valid media URL.',
         status: '',
       });
       return;
@@ -246,7 +246,7 @@ export function MediaForm() {
     if (enableTurnstile && !turnstileToken) {
       setState({
         results: null,
-        error: 'Complete the verification.',
+        error: 'Complete the security check to continue.',
         status: '',
       });
       return;
@@ -279,7 +279,7 @@ export function MediaForm() {
     setShouldShowPendingStatus(false);
     setPendingStatus({
       title: 'Submitting Request',
-      message: 'Sending the analysis request to the server.',
+      message: 'Sending the analysis request.',
     });
     setState((prev) => ({ ...prev, error: null, status: 'Loading' }));
     const startTime = performance.now();
@@ -340,14 +340,14 @@ export function MediaForm() {
               const text = await response.text();
               if (!response.ok) {
                 throw createAnalyzeError(
-                  `Server Error (${String(response.status)}): The analysis server failed or timed out.`,
+                  `Server error (${String(response.status)}). The analysis server failed or timed out.`,
                   response.status,
                   RETRYABLE_HTTP_STATUSES.has(response.status),
                 );
               }
               console.error('Unexpected non-JSON response:', text);
               throw createAnalyzeError(
-                'Received invalid response from server.',
+                'Received an invalid response from the server.',
               );
             }
 
@@ -359,7 +359,7 @@ export function MediaForm() {
           if (!response.ok || data.success === false || errorMessage) {
             throw createAnalyzeError(
               errorMessage ??
-                'Unable to analyze URL. Verify the link is correct.',
+                'Unable to analyze the URL. Verify the link and try again.',
               response.status,
               RETRYABLE_HTTP_STATUSES.has(response.status),
             );
@@ -383,7 +383,7 @@ export function MediaForm() {
           if (attempt < MAX_ANALYZE_RETRIES && isRetryableRequestError(err)) {
             setPendingStatus({
               title: 'Retrying Request',
-              message: `The request failed before completion. Retrying (${String(attempt + 1)}/${String(MAX_ANALYZE_RETRIES)}).`,
+              message: `The request ended before analysis finished. Retrying now (${String(attempt + 1)}/${String(MAX_ANALYZE_RETRIES)}).`,
             });
             await wait(RETRY_BACKOFF_MS * (attempt + 1));
             continue;
@@ -397,10 +397,10 @@ export function MediaForm() {
       triggerError();
       const errorMessage =
         lastError instanceof Error && lastError.name === 'AbortError'
-          ? 'Analysis timed out. Please retry with a smaller or simpler source URL.'
+          ? 'Analysis timed out. Retry with a smaller or simpler source URL.'
           : lastError instanceof Error
             ? lastError.message
-            : 'Analysis Failed';
+            : 'Analysis failed.';
       setState({
         results: null,
         error: errorMessage,
@@ -548,7 +548,8 @@ export function MediaForm() {
                     if (hadPendingSubmit || hadTokenRequest) {
                       setState((prev) => ({
                         ...prev,
-                        error: 'Verification was cancelled.',
+                        error:
+                          'Verification was canceled. Complete the security check to continue.',
                       }));
                     }
                   }
@@ -558,7 +559,7 @@ export function MediaForm() {
                   <DialogHeader>
                     <DialogTitle>Verify Before Analysis</DialogTitle>
                     <DialogDescription>
-                      Complete the Turnstile check to run this analysis request.
+                      Complete the security check to continue.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="flex min-h-[65px] justify-center">
@@ -588,7 +589,7 @@ export function MediaForm() {
                         setState((prev) => ({
                           ...prev,
                           error:
-                            'Security check failed. Please refresh and try again.',
+                            'Security check failed. Refresh the page and try again.',
                         }));
                       }}
                       onExpire={() => {

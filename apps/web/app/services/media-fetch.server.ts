@@ -84,7 +84,7 @@ const assertByteFetchStatus = (res: Response) => {
   }
   if (res.status === 403) {
     throw new Error(
-      'Access denied while fetching media bytes. The link may have expired or blocked server-side fetches.',
+      'Access denied while fetching media bytes. The link may have expired or may block server-side requests.',
     );
   }
   throw new Error(

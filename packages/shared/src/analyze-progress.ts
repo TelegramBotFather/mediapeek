@@ -11,6 +11,7 @@ export const AnalyzeProgressStageSchema = z.enum([
   'initial_fetch_started',
   'waiting_for_first_byte',
   'first_byte_received',
+  'initial_segment_reading',
   'no_range_fallback_started',
   'source_range_unsupported',
   'remote_seek_fetch_started',

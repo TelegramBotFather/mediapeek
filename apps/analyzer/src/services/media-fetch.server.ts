@@ -103,7 +103,7 @@ const assertByteFetchStatus = (res: Response) => {
   }
   if (res.status === 403) {
     throw new Error(
-      'Access denied while fetching media bytes. The link may have expired or blocked server-side fetches.',
+      'Access denied while fetching media bytes. The link may have expired or may block server-side requests.',
     );
   }
   throw new Error(
@@ -714,6 +714,12 @@ export async function fetchMediaChunk(
       'The source did not honor byte-range requests, so analysis will continue without remote seek reads.',
     );
   }
+
+  await reportProgress?.(
+    'initial_segment_reading',
+    'Reading Initial Segment',
+    'The source started responding. MediaPeek is reading the first 10 MB needed before analysis can begin.',
+  );
 
   if (filenameSource === 'url') {
     const getFilename = parseContentDispositionFilename(

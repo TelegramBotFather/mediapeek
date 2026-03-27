@@ -267,7 +267,7 @@ const buildTooManyRequestsResponse = (
       requestId,
       error: {
         code: 'RATE_LIMITED',
-        message: 'Too many analysis requests. Please retry shortly.',
+        message: 'Too many analysis requests. Try again in a moment.',
         retryable: true,
       },
     },
@@ -456,7 +456,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
             requestId,
             500,
             'INTERNAL_ERROR',
-            'Security verification is currently unavailable. Please try again later.',
+            'Security verification is unavailable right now. Try again later.',
             true,
             compatibilityHeaders,
           );
@@ -497,7 +497,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
               requestId,
               403,
               'AUTH_REQUIRED',
-              'Security verification is required. Please complete the check.',
+              'Complete the security check to continue.',
               false,
               compatibilityHeaders,
             );
@@ -528,7 +528,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
               requestId,
               503,
               'INTERNAL_ERROR',
-              'Unable to validate the security check right now. Please try again.',
+              'Security check is unavailable right now. Try again in a moment.',
               true,
               compatibilityHeaders,
             );
@@ -550,7 +550,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
               requestId,
               403,
               'AUTH_INVALID',
-              'Security check failed. Please refresh and try again.',
+              'Security check failed. Refresh the page and try again.',
               false,
               compatibilityHeaders,
             );
@@ -591,7 +591,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
           requestId,
           503,
           'INTERNAL_ERROR',
-          'Analyzer service binding is unavailable. Please try again shortly.',
+          'Analyzer service is unavailable. Try again in a moment.',
           true,
           compatibilityHeaders,
         );
@@ -678,7 +678,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
           'INTERNAL_ERROR',
           isMissingLocalDevSession
             ? 'Analyzer local dev worker is unavailable. Restart `pnpm dev` and retry.'
-            : 'Analyzer service returned an unexpected response. Please retry.',
+            : 'Analyzer service returned an unexpected response. Try again.',
           true,
           compatibilityHeaders,
         );
@@ -701,7 +701,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
           requestId,
           502,
           'INTERNAL_ERROR',
-          'Analyzer service returned malformed data. Please retry.',
+          'Analyzer service returned malformed data. Try again.',
           true,
           compatibilityHeaders,
         );
@@ -718,7 +718,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
             requestId,
             400,
             'VALIDATION_FAILED',
-            firstIssue.message || 'Invalid request data',
+            firstIssue.message || 'Invalid request data.',
             false,
             compatibilityHeaders,
           );
@@ -758,7 +758,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
           requestId,
           502,
           'INTERNAL_ERROR',
-          'Analyzer response was incomplete. Please retry.',
+          'Analyzer response was incomplete. Try again.',
           true,
           compatibilityHeaders,
         );
@@ -830,7 +830,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
         code = 'CPU_BUDGET_EXCEEDED';
         retryable = true;
         errorMessage =
-          'CPU budget exceeded while analyzing this source. Please retry with a smaller or simpler media file.';
+          'CPU budget exceeded while analyzing this source. Retry with a smaller or simpler media file.';
         customContext.errorClass = 'CPU_LIMIT_EXCEEDED';
       } else if (
         error instanceof Error &&
@@ -841,7 +841,7 @@ async function handleAnalyzeRequest({ request, context }: AnalyzeRouteArgs) {
         code = 'UPSTREAM_FETCH_FAILED';
         retryable = true;
         errorMessage =
-          'Analysis request timed out upstream. Please retry with a smaller or simpler source URL.';
+          'Analysis request timed out upstream. Retry with a smaller or simpler source URL.';
         customContext.errorClass = 'ANALYZER_TIMEOUT';
       } else if (
         errorMessage.includes('internal error; reference =') ||

@@ -1,95 +1,95 @@
-import type { Route } from "./+types/route";
+import type { Route } from './+types/route';
 
 import {
   FileZipIcon,
   FlashIcon,
   KeyframesMultipleIcon,
   SecurityLockIcon,
-} from "@hugeicons/core-free-icons";
-import { buttonVariants } from "@mediapeek/ui/components/button";
+} from '@hugeicons/core-free-icons';
+import { buttonVariants } from '@mediapeek/ui/components/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@mediapeek/ui/components/card";
-import { Icon } from "@mediapeek/ui/components/icon";
-import { cn } from "@mediapeek/ui/lib/utils";
-import { Link } from "react-router";
+} from '@mediapeek/ui/components/card';
+import { Icon } from '@mediapeek/ui/components/icon';
+import { cn } from '@mediapeek/ui/lib/utils';
+import { Link } from 'react-router';
 
-import { Footer } from "~/components/footer";
-import { Header } from "~/components/header";
-import { TrademarkNotice } from "~/components/media-view/trademark-notice";
-import { MEDIA_CONSTANTS } from "~/lib/media/constants";
+import { Footer } from '~/components/footer';
+import { Header } from '~/components/header';
+import { TrademarkNotice } from '~/components/media-view/trademark-notice';
+import { MEDIA_CONSTANTS } from '~/lib/media/constants';
 
 export const meta: Route.MetaFunction = () => {
   return [
-    { title: "Home - MediaPeek" },
+    { title: 'Home - MediaPeek' },
     {
-      name: "description",
+      name: 'description',
       content:
-        "Inspect media metadata from a URL in a clear, reliable interface.",
+        'Inspect media metadata from a URL in a clear, reliable interface.',
     },
   ];
 };
 
 const capabilities = [
   {
-    id: "partial-fetching",
-    title: "Partial Fetching",
+    id: 'partial-fetching',
+    title: 'Partial Fetching',
     description:
-      "Reads only the bytes it needs from a URL\u2009—\u2009no full download required. Works with large files just as well as small ones.",
+      'Reads only the bytes needed from a URL\u2009—\u2009no full download required, even for large files.',
     specs: [
-      "Byte-range HTTP requests",
-      "Edge-processed near the user",
-      "HTTP/HTTPS URLs",
-      "Google Drive public files & folders",
+      'Byte-range HTTP requests',
+      'Edge-processed near the user',
+      'HTTP/HTTPS URLs',
+      'Google Drive public files & folders',
     ],
   },
   {
-    id: "archive-support",
-    title: "Archive Support",
+    id: 'archive-support',
+    title: 'Archive Support',
     description:
-      "Looks inside ZIP and TAR archives without extracting the full file. The original archive name stays visible for context.",
+      'Looks inside ZIP and TAR archives without extracting the full file. Keeps the archive name visible for context.',
     specs: [
-      "ZIP (Stored, DEFLATE)",
-      "TAR (standard + @LongLink)",
-      "Preserves archive \u2192 filename context",
+      'ZIP (Stored, DEFLATE)',
+      'TAR (standard + @LongLink)',
+      'Preserves archive \u2192 filename context',
     ],
   },
   {
-    id: "multiple-exports",
-    title: "Multiple Exports",
+    id: 'multiple-exports',
+    title: 'Multiple Exports',
     description:
-      "Export metadata in the format that fits your workflow\u2009—\u2009whether you need something human-readable or machine-parseable.",
-    specs: ["Object", "JSON", "Text", "HTML", "XML"],
+      'Export metadata in the format that fits your workflow\u2009—\u2009whether you need something readable or machine-parseable.',
+    specs: ['Object', 'JSON', 'Text', 'HTML', 'XML'],
   },
   {
-    id: "encrypted-sharing",
-    title: "Encrypted Sharing",
+    id: 'encrypted-sharing',
+    title: 'Encrypted Sharing',
     description:
-      "Share results through encrypted links. Nothing is stored on our servers\u2009—\u2009the key stays in the URL.",
-    specs: ["End-to-end encryption via PrivateBin"],
+      'Share results through encrypted links. MediaPeek does not store the content, and the key stays in the URL.',
+    specs: ['End-to-end encryption via PrivateBin'],
   },
 ] as const;
 
 const badges = [
-  "dolby-vision",
-  "dolby-atmos",
-  "hdr",
-  "hdr10-plus",
-  "4k",
-  "sd",
-  "hd",
-  "imax",
-  "dts",
-  "dts-x",
-  "hi-res-lossless",
-  "apple-digital-master",
-  "aac",
-  "cc",
-  "sdh",
+  'dolby-vision',
+  'dolby-atmos',
+  'hdr',
+  'hdr10-plus',
+  '4k',
+  'sd',
+  'hd',
+  'imax',
+  'dts',
+  'dts-x',
+  'hi-res-lossless',
+  'apple-digital-master',
+  'aac',
+  'cc',
+  'sdh',
 ] as const;
 
 const trademarkBadges = [
@@ -105,20 +105,20 @@ const trademarkBadges = [
 
 const METADATA_ENGINE = {
   mediainfoJs: {
-    version: "0.3.7",
-    url: "https://mediainfo.js.org/",
+    version: '0.3.7',
+    url: 'https://mediainfo.js.org/',
   },
   mediaInfoLib: {
-    version: "25.10",
-    url: "https://github.com/MediaArea/MediaInfoLib",
+    version: '25.10',
+    url: 'https://github.com/MediaArea/MediaInfoLib',
   },
 } as const;
 
 const capabilityIcons: Record<string, typeof FlashIcon> = {
-  "partial-fetching": FlashIcon,
-  "archive-support": FileZipIcon,
-  "multiple-exports": KeyframesMultipleIcon,
-  "encrypted-sharing": SecurityLockIcon,
+  'partial-fetching': FlashIcon,
+  'archive-support': FileZipIcon,
+  'multiple-exports': KeyframesMultipleIcon,
+  'encrypted-sharing': SecurityLockIcon,
 };
 
 export default function HomeRoute() {
@@ -160,7 +160,7 @@ export default function HomeRoute() {
               <Link
                 to="/app"
                 viewTransition
-                className={cn(buttonVariants({ size: "lg" }), "min-w-40")}
+                className={cn(buttonVariants({ size: 'lg' }), 'min-w-40')}
               >
                 Open App
               </Link>
@@ -182,20 +182,20 @@ export default function HomeRoute() {
               What it does
             </h2>
             <p className="text-muted-foreground mt-3 max-w-xl text-base leading-relaxed sm:text-lg">
-              Four things MediaPeek handles for you, from fetch to share.
+              Four things MediaPeek handles, from fetch to share.
             </p>
           </div>
 
-          <div className="grid gap-0 border-t border-border/60">
+          <div className="border-border/60 grid gap-0 border-t">
             {capabilities.map((cap, idx) => (
               <div
                 key={cap.id}
-                className="group grid gap-6 border-b border-border/60 py-8 transition-all duration-500 ease-out sm:grid-cols-[1fr_1.5fr] sm:gap-10 sm:py-10 starting:translate-y-3 starting:opacity-0"
+                className="group border-border/60 grid gap-6 border-b py-8 transition-all duration-500 ease-out sm:grid-cols-[1fr_1.5fr] sm:gap-10 sm:py-10 starting:translate-y-3 starting:opacity-0"
                 style={{ transitionDelay: `${idx * 100}ms` }}
               >
                 {/* Left: title + icon */}
                 <div className="flex items-center gap-3">
-                  <div className="flex shrink-0 items-center justify-center text-primary">
+                  <div className="text-primary flex shrink-0 items-center justify-center">
                     {capabilityIcons[cap.id] && (
                       <Icon icon={capabilityIcons[cap.id]} size={28} />
                     )}
@@ -214,7 +214,7 @@ export default function HomeRoute() {
                     {cap.specs.map((spec) => (
                       <span
                         key={spec}
-                        className="rounded-md border border-border/70 bg-muted/30 px-2 py-1 font-mono text-[0.7rem] leading-none text-foreground/70"
+                        className="border-border/70 bg-muted/30 text-foreground/70 rounded-md border px-2 py-1 font-mono text-[0.7rem] leading-none"
                       >
                         {spec}
                       </span>
@@ -289,7 +289,7 @@ export default function HomeRoute() {
                   </h2>
                   <p className="text-muted-foreground max-w-3xl text-base leading-relaxed sm:text-lg">
                     MediaPeek uses mediainfo.js for metadata analysis. It runs
-                    through WebAssembly and is based on MediaInfoLib.
+                    in WebAssembly and is based on MediaInfoLib.
                   </p>
                 </div>
               </div>
@@ -357,8 +357,8 @@ export default function HomeRoute() {
                     target="_blank"
                     rel="noreferrer"
                     className={cn(
-                      buttonVariants({ size: "lg", variant: "outline" }),
-                      "min-w-48",
+                      buttonVariants({ size: 'lg', variant: 'outline' }),
+                      'min-w-48',
                     )}
                   >
                     View Source Code

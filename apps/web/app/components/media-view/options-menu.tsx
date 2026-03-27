@@ -138,7 +138,7 @@ export function OptionsMenu({
   const copyToClipboard = () => {
     if (shareData?.url) {
       void navigator.clipboard.writeText(shareData.url);
-      toast.success('Link copied to clipboard');
+      toast.success('Link Copied');
       setShareDialogOpen(false);
     }
   };
@@ -150,8 +150,8 @@ export function OptionsMenu({
           <AlertDialogHeader>
             <AlertDialogTitle>Link Created</AlertDialogTitle>
             <AlertDialogDescription>
-              The <strong>{shareData?.label}</strong> metadata for this file has
-              been encrypted:
+              The <strong>{shareData?.label}</strong> metadata for this file was
+              encrypted and uploaded to PrivateBin.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="grid gap-4">
@@ -347,7 +347,7 @@ export function OptionsMenu({
                 </TabsList>
                 <TabsContent value="copy" className="mt-4">
                   <p className="text-muted-foreground mb-3 text-xs">
-                    Select a format to copy metadata to clipboard.
+                    Select a format to copy metadata to the clipboard.
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {formats.map((fmt, i) => (
@@ -368,7 +368,7 @@ export function OptionsMenu({
                 </TabsContent>
                 <TabsContent value="share" className="mt-4">
                   <p className="text-muted-foreground mb-3 text-xs">
-                    Select a format to secure share via PrivateBin.
+                    Select a format to create an encrypted PrivateBin link.
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {formats.map((fmt, i) => (
