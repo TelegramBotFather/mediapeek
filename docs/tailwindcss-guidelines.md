@@ -19,8 +19,8 @@ For Vite-based projects, use the dedicated Vite plugin. `postcss-import` and `au
 
 ```ts
 // vite.config.ts
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vite';
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [tailwindcss()],
@@ -33,7 +33,7 @@ The `@tailwind` directives are removed. Use a single import:
 
 ```css
 /* app/globals.css */
-@import 'tailwindcss';
+@import "tailwindcss";
 ```
 
 ## 3. CSS-First Configuration
@@ -47,7 +47,7 @@ Use `@theme` to define design tokens. These become available as utility classes 
 ```css
 @theme {
   /* Overrides or extends the default theme */
-  --font-display: 'Satoshi', 'sans-serif';
+  --font-display: "Satoshi", "sans-serif";
   --color-brand-500: oklch(0.72 0.18 255);
   --breakpoint-3xl: 120rem;
 
@@ -170,21 +170,21 @@ Animate entry without JS using `@starting-style`.
 
 ### Syntax & Behavior Changes
 
-1.  **Important Modifier**:
-    - **v3**: `!bg-red-500` or `hover:!bg-red-500`
-    - **v4**: `bg-red-500!` or `hover:bg-red-500!` (Always at the end)
+1. **Important Modifier**:
+   - **v3**: `!bg-red-500` or `hover:!bg-red-500`
+   - **v4**: `bg-red-500!` or `hover:bg-red-500!` (Always at the end)
 
-2.  **Opacity Modifiers**:
-    - **Removed**: `bg-opacity-*`, `text-opacity-*`
-    - **Use**: Slash syntax `bg-black/50`, `text-white/20`
+2. **Opacity Modifiers**:
+   - **Removed**: `bg-opacity-*`, `text-opacity-*`
+   - **Use**: Slash syntax `bg-black/50`, `text-white/20`
 
-3.  **Arbitrary Values**:
-    - **Variables**: Use parentheses `bg-(--brand-color)` instead of `bg-[--brand-color]`.
-    - **Spaces**: Use underscores `grid-cols-[1fr_2fr]`.
+3. **Arbitrary Values**:
+   - **Variables**: Use parentheses `bg-(--brand-color)` instead of `bg-[--brand-color]`.
+   - **Spaces**: Use underscores `grid-cols-[1fr_2fr]`.
 
-4.  **Hover on Mobile**:
-    - `hover:` strictly uses `@media (hover: hover)`.
-    - It **will not** trigger on touch devices.
+4. **Hover on Mobile**:
+   - `hover:` strictly uses `@media (hover: hover)`.
+   - It **will not** trigger on touch devices.
 
 ### Changed Defaults
 
@@ -223,13 +223,13 @@ Avoid if possible. requires `@reference "#tailwind";` at the top of the file.
 
 When generating code:
 
-1.  **Check Version**: Assume **Tailwind v4.1** syntax.
-2.  **Verify Breaking Changes**: distinctively check for `shadow-sm`, `ring-3`, `outline-hidden`.
-3.  **Use Modern Syntax**: `bg-linear-to-r`, `bg-black/50`, `py-2!`.
-4.  **Use New Utilities**: Prefer `text-shadow-*` and `mask-*` over custom CSS.
-5.  **Avoid Config Files**: Do not suggest `tailwind.config.js`. Use `@theme`.
-6.  **Explicit Colors**: Add explicit color classes for borders/rings if not inheriting.
-7.  **Hover Caution**: Be aware `hover:` does not apply on touch.
+1. **Check Version**: Assume **Tailwind v4.1** syntax.
+2. **Verify Breaking Changes**: distinctively check for `shadow-sm`, `ring-3`, `outline-hidden`.
+3. **Use Modern Syntax**: `bg-linear-to-r`, `bg-black/50`, `py-2!`.
+4. **Use New Utilities**: Prefer `text-shadow-*` and `mask-*` over custom CSS.
+5. **Avoid Config Files**: Do not suggest `tailwind.config.js`. Use `@theme`.
+6. **Explicit Colors**: Add explicit color classes for borders/rings if not inheriting.
+7. **Hover Caution**: Be aware `hover:` does not apply on touch.
 
 ---
 

@@ -1,34 +1,36 @@
-# MediaPeek Dev Commands
+# Contributing
+
+This guide covers the development workflow, workspace layout, and common commands for working on MediaPeek.
+
+Unless noted otherwise, run commands from the repository root.
 
 ## Workspaces
 
-- `apps/web` = frontend app
-- `apps/analyzer` = analyzer worker
-- `packages/ui` = shared shadcn/ui package
-- `packages/shared` = shared non-UI code
+- `apps/web`: frontend app
+- `apps/analyzer`: analyzer worker
+- `packages/ui`: shared shadcn/ui package
+- `packages/shared`: shared non-UI code
 
-## Rule
+## Rules
 
-- Use repo root for almost everything
+- Use the repository root for most commands
 - Use `pnpm --filter ...` for one workspace
-- Use `apps/web` as the shadcn entrypoint config
+- Use `apps/web` as the shadcn app configuration
 - Let `packages/ui` own the generated shared shadcn components
 - Do not run shadcn in `packages/shared`
 
-## Important Notes
+## Notes
 
-- Run shadcn from the repo root with the app config: `pnpm dlx shadcn@latest add <component> -c apps/web`
-- The app config resolves shared UI output into `packages/ui/src/components`
+- Run shadcn from the repository root with the app config: `pnpm dlx shadcn@latest add <component> -c apps/web`
+- The app config writes shared UI output to `packages/ui/src/components`
 - Keep shared shadcn dependencies and generated components in `packages/ui`
 - Do not run shadcn commands in `packages/shared`
-- Use repo root for `pnpm install`, `pnpm update -r`, `pnpm lint`, `pnpm test`, `pnpm typecheck`, and `pnpm build`
-- Use `pnpm fmt` and `pnpm fmt:check` for Oxfmt-based formatting
+- Use the repository root for `pnpm install`, `pnpm update -r`, `pnpm lint`, `pnpm test`, `pnpm typecheck`, and `pnpm build`
+- Use `pnpm fmt` and `pnpm fmt:check` for `oxfmt` formatting
 - After dependency or shadcn updates, review the git diff before committing
 - The sample app in `sample/react-router-monorepo` is reference-only; do not migrate or clean its tooling as part of main repo work
 
 ## Root Commands
-
-Run from repo root:
 
 ```bash
 pnpm install
@@ -55,8 +57,6 @@ mediapeek-analyzer
 
 ## Web Commands
 
-Run from repo root:
-
 ```bash
 pnpm --filter mediapeek-web dev
 pnpm --filter mediapeek-web lint
@@ -68,8 +68,6 @@ pnpm --filter mediapeek-web cf-typegen
 ```
 
 ## Analyzer Commands
-
-Run from repo root:
 
 ```bash
 pnpm --filter mediapeek-analyzer dev
@@ -83,8 +81,6 @@ pnpm --filter mediapeek-analyzer cf-typegen
 
 ## Shared Package Commands
 
-Run from repo root:
-
 ```bash
 pnpm --filter @mediapeek/ui lint
 pnpm --filter @mediapeek/ui typecheck
@@ -96,8 +92,6 @@ pnpm --filter @mediapeek/shared test
 ```
 
 ## Dependency Update Commands
-
-Run from repo root:
 
 ```bash
 pnpm update -r
@@ -128,7 +122,7 @@ Preferred shared UI workflow:
 pnpm dlx shadcn@latest add button -c apps/web
 ```
 
-This resolves aliases from `apps/web/components.json` and writes shared UI files into:
+This uses `apps/web/components.json` and writes shared UI files to:
 
 ```bash
 packages/ui/src/components
@@ -149,8 +143,6 @@ apps/analyzer/.dev.vars
 
 ## Wrangler Commands
 
-Run from repo root:
-
 ```bash
 pnpm dlx wrangler login
 
@@ -163,16 +155,12 @@ pnpm --filter mediapeek-analyzer exec wrangler secret put ANALYZE_API_KEY
 
 ## Deploy Order
 
-Run from repo root:
-
 ```bash
 pnpm --filter mediapeek-analyzer run deploy
 pnpm --filter mediapeek-web run deploy
 ```
 
 ## Validation
-
-Run from repo root:
 
 ```bash
 pnpm lint
