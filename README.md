@@ -59,7 +59,7 @@ https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlaze
 
 - [x] **Archive bitrate accuracy**. Fixed in [d782473](https://github.com/DG02002/mediapeek/commit/d7824738b9f94b963b0370f7faa4733d771ce767). MediaPeek now corrects file size and bitrate for archive-backed media when the inner entry size can be verified from archive metadata. If the inner size cannot be verified reliably, the UI marks the result as archive-estimated and shows an info tooltip.
 
-- [x] **MediaInfo seek reads over lazy HTTP range fetches**. Resolved with the upstream patch shared in [MediaInfoLib #2555](https://github.com/MediaArea/MediaInfoLib/issues/2555#issuecomment-4053159366). Special thanks to `@cjee21` for providing the patch.
+- [x] **MediaInfo seek reads over lazy HTTP range fetches**. Fixed in [5fa672a](https://github.com/DG02002/mediapeek/commit/5fa672aaab37b5a847183416b5e5083347387209) with a patch shared by `@cjee21` during discussion of a similar MediaInfo macOS build bug in [MediaInfoLib #2555](https://github.com/MediaArea/MediaInfoLib/issues/2555).
 
 ## License
 
